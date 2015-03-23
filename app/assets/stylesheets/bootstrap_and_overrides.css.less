@@ -1,0 +1,297 @@
+@import "twitter/bootstrap/bootstrap";
+
+input,
+.uneditable-input {    // fixes the shrunkdown text input? 05/22/2012
+  height: 29px;
+  line-height: 29px;
+}
+
+body { padding-top: 0px; }
+
+.row {
+  margin-left: 0px; // bootstrap setting is: -20px;
+  *zoom: 1;
+}
+
+
+@import "twitter/bootstrap/responsive";
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+
+// Your custom LESS stylesheets goes here
+//
+// Since bootstrap was imported above you have access to its mixins which
+// you may use and inherit here
+//
+// If you'd like to override bootstrap's own variables, you can do so here as well
+// See http://twitter.github.com/bootstrap/less.html for their names and documentation
+//
+// Example:
+// @linkColor: #ff0000;
+
+
+.banner-blank-strip 
+{
+font-size:1px;
+background-color: #ffffff;
+padding:1px 0
+}
+
+.banner {
+// background-color: #00b0d0;
+// width:400px;
+  font-size:18px;
+//  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+padding-top: 5px;
+padding-bottom: 5px;
+}
+
+.main-footer {
+-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+-moz-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+box-shadow:0 1px 3px rgba(0,0,0,0.2);
+border-top:1px solid #ccc;
+position:fixed;
+bottom:0;
+text-align:center;
+width:100%;
+font-size:12px;
+background:#fff;
+ background:rgba(255,255,255,0.95);
+ padding:5px 20px;
+}
+
+.main-footer p {
+display:inline-block;
+margin:0
+}
+.main-footer a { 
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+display:inline-block;padding:0px 6px;
+line-height:20px;margin-left:0;
+text-decoration:none
+}
+.main-footer a:hover {
+background:#2566b7;
+color:#fff
+}
+.main-footer.copyright { 
+display:inline-block;
+padding:0 6px 0 0;
+color:#777;
+margin:0;
+line-height:20px
+}
+.main-footer.share {
+float:right;
+height:20px
+}
+
+
+.small-menu 
+{
+font-size:12px;
+//background:#fff;
+//background:rgba(255,255,255,0.95);
+padding:10px 0
+}
+
+.small-menu p 
+{
+display:inline-block;
+margin:0
+}
+
+.small-menu a 
+{ 
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+display:inline-block;padding:0px 6px;
+line-height:20px;margin-left:0;
+text-decoration:none
+}
+
+.small-menu a:hover {
+background:#2566b7;
+color:#fff
+}
+
+.small-menu .active {
+background:#2566b7;
+color:#fff
+}
+
+
+.big-menu 
+{
+-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+-moz-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+box-shadow:0 1px 3px rgba(0,0,0,0.2);
+border-top:1px solid #ccc;
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+font-size:12px;
+background-color: #0067A9;
+padding:0px 0
+}
+
+.big-menu p 
+{
+display:inline-block;
+margin:0;
+}
+
+.big-menu a 
+{ 
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+display:inline-block;
+padding:0px 6px;
+line-height:30px;
+margin-left:0;
+text-decoration:none;
+background:#5491C7;
+color:#ffffff
+}
+
+.big-menu a:visited {
+color:#ffffff
+}
+
+.big-menu .active:visited {
+color:#2566b7
+}
+
+.big-menu a:hover {
+background:#2566b7;
+color:#fff
+}
+
+.big-menu .active {
+background:#ffffff;
+color:#2566b7
+}
+
+.big-menu .active:hover {
+background:#ffffff;
+color:#2566b7
+}
+
+
+
+.top-menu 
+{
+font-size:12px;
+background:#fff;
+background:rgba(255,255,255,0.95);
+padding:10px 0
+}
+
+
+.top-menu button 
+{ 
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+display:inline-block;
+//padding:0px 6px;
+line-height:0px;
+margin-left:0;
+text-decoration:none;
+vertical-align: middle;
+}
+
+
+
+
+
+.bc-menu 
+{
+font-size:12px;
+//background:#fff;
+//background:rgba(255,255,255,0.95);
+padding:10px 0;
+//-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+//-moz-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+//box-shadow:0 1px 3px rgba(0,0,0,0.2);
+//border-top:1px solid #ccc;
+text-align:center;
+padding-top: 15px;
+padding-top: 15px;
+}
+
+
+.bc-menu button 
+{ 
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+display:inline-block;
+padding:0px 6px;
+line-height:20px;
+margin-left:0;
+text-decoration:none
+}
+
+
+.bc-menu p 
+{
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+-moz-box-shadow:0 1px 3px rgba(0,0,0,0.2);
+box-shadow:0 1px 3px rgba(0,0,0,0.2);
+display:inline-block;
+padding:0px 0px;
+line-height:10px;
+margin-left:20px;
+text-decoration:none
+}
+
+.bc-menu a 
+{ 
+-webkit-border-radius:4px;
+-moz-border-radius:4px;
+-ms-border-radius:4px;
+-o-border-radius:4px;
+border-radius:4px;
+display:inline-block;
+padding:0px 6px;
+line-height:20px;
+margin-left:0;
+text-decoration:none
+}
+
+.bc-menu a:hover {
+background:#2566b7;
+color:#fff
+}
+
+.bc-menu .active {
+background:#2566b7;
+color:#fff
+}

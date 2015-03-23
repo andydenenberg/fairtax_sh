@@ -1,0 +1,89 @@
+<script>
+//<%= link_to 'Logout', destroy_user_session_path, :method => :delete, :class =>'btn' %>
+//<%= link_to 'System', users_path, :class =>'btn' %>	
+
+</script>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Store</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	
+
+<div class="container">
+
+
+
+		<div class='top-menu'>
+			<%= link_to image_tag('/assets/ft_logo.png', :size => '200x35'), startup_myprops_path %>  							
+		    <div class="btn-group pull-right">
+			
+
+<!-- put the drop-down links here -->
+
+
+
+			<% if user_signed_in? %>	
+		      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		        <i class="icon-user"></i>	
+					<%= current_user.email %>
+			          <span class="caret"></span>
+			        </a>
+			        <ul class="dropdown-menu">
+			          <li><%= link_to 'System Info', users_path %></li>
+			          <li class="divider"></li>
+			          <li><%= link_to 'Logout', destroy_user_session_path, :method => :delete %></li>
+			        </ul>
+				<% else %>
+					<%= link_to 'Sign In', new_user_session_path, :class =>'btn' %>	
+				<% end %>
+			</div>
+			<% if alert %>
+				<%= alert %>
+			<% elsif notice %>
+				<%= notice %>
+			<% end %>
+			
+		</div>
+
+			<div class='big-menu' style='height:10px;'>
+			  <p> 
+<!--
+  			< % if session[:top_menu] == 'Towns' or session[:top_menu] == 'Properties' or session[:top_menu] == 'Analysis' %> 
+	 		< %= link_to '-', '#', :style => 'color: #0067A9;background-color: #0067A9;' %>
+			< %= top_menu('Analysis',myprops_path).html_safe %>
+			< %= top_menu('Properties', start_search_properties_path).html_safe %>
+		< % else %>
+		 	< %= link_to '-', '#', :style => 'color: #0067A9;background-color: #0067A9;' %>
+		< % end %>
+-->
+
+			  </p>
+			</div>
+
+						<%= yield %>
+						<%= yield :scripts %>
+
+	</div><!-- container -->
+
+	  <footer class='main-footer'>
+	  <span class='copyright'>&copy; 2012 Osprey Point Partners</span>
+	  <p>  
+	      <a href="/about">About</a>
+	      <a href="http://blog.ospreypointpartners.com" rel="external">Blog</a>
+	      <a href="http://twitter.com/andydenenberg" rel="external">Twitter</a>
+	      <a href="http://facebook.com/andydenenberg626" rel="external">Facebook</a>
+	      <a href="mailto:support@ospreypointpartners.com" onclick="__CHARM.show(); return false">Support &amp; Feedback</a>
+	  </p>
+
+	</footer>
+
+</body>
+</html>
+

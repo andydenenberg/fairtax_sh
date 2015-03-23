@@ -1,0 +1,37 @@
+
+
+<div class='row'>
+	<div class='span6'>
+		<ul class="breadcrumb">
+		  <li><a href="#">Properties</a></li> |
+		  <li><a href="#"><%= @myprop.street %></a></li> |
+		  <li><a href="#"><b>Block Analysis</b></a></li>
+		</ul>
+	</div>
+		<div class='span6'>
+
+			<div class="btn-group pull-right">
+			<%= link_to "Summary", property_path(@myprop), :class => 'btn' %>
+			<%= link_to "Block Information", property_path(@myprop), :class => 'btn active' %>
+			</div>
+		</div>
+</div>
+<div class='row'>
+	<div class='span6 offset6 pull-right'>
+		<%= link_to "Summary", my_block_summary_properties_path(:id => @myprop), :class => 'btn active' %>
+		<%= link_to "Tax Summary", my_block_analysis_summary_properties_path(:id => @myprop), :class => 'btn' %>
+		<%= link_to "Tax Details", my_block_analysis_properties_path(:id => @myprop), :class => 'btn' %>
+		<%= link_to "Map", my_block_map_properties_path(:id => @myprop), :class => 'btn' %>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='span10 offset1'>
+		<div class="page-header">
+		  <h3><%= @myprop.street %><small> <%= @myprop.city %> <b> Block: </b><%= @myprop.pin[0..8]%></small>
+		  </h3>
+		</div>
+	</div>
+</div>
+
+<%= render 'my_block_summary' %>

@@ -1,0 +1,118 @@
+<style type="text/css">
+.map_container {
+  width: 400px;
+}
+
+.gmaps4rails_map {
+  width: 400px;
+  height: 300px;
+}
+
+.table th, .table td {
+border-top-color: #ffffff;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #ffffff;
+}
+
+</style>
+
+<div class='banner-blank-strip'></div>
+
+<% if @lists[0] %>
+<div class='small-menu'>
+	    <div class="btn-group">
+	      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	        <i class="icon-list"></i>	
+			Select List
+	          <span class="caret"></span>
+	        </a>
+	        <ul class="dropdown-menu">
+			<% @lists.each do |list| %>
+			  <li><%= link_to "List " + list[0].to_s, comp_analysis_summary_properties_path(:list_num => list[0]) %></li>
+			<% end %>
+	        </ul>						
+		</div>		
+</div>
+<% end %>
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+
+	<div class="page-header">
+	  <h3>Comp Analysis
+		<small>The start of a reduction</small>
+	  </h3><%= link_to 'New List', start_search_properties_path(:id => @primary_id, :list_num => @list_num ), :class => 'btn' %>
+	</div>
+	
+<% if @lists[0] %>
+			<table  class="table">	
+			<% i = 1 %>
+			<% @groups.each do |primary, data, map, list, b_ave, br_ave, age_ave, count | %>
+
+			<tr>
+				<td>
+					<div class='small-menu'>
+					  <p>  
+							<%= link_to 'List ' + list.to_s, comp_map_properties_path(:id => primary[0].id, :list_num => list ), :class => "btn" %>	
+							<%= link_to 'Delete List', remove_all_props_myprops_path(:id => primary[0].id, :list_num => list ), confirm: 'Are you sure?', :class => "btn" %>
+					  </p>
+					</div>
+				<p><b>Primary Property: </b><%= image_tag('http://maps.google.com/mapfiles/marker.png') %><br>
+				<%= link_to primary[0].street, property_path(primary[0].id ) %>, <%= primary[0].city %> </p>
+
+				<p><b>Comps: <%= image_tag('http://labs.google.com/ridefinder/images/mm_20_green.png') %></b><br></p>
+				<% data.each do |prop| %>
+				<%= link_to prop.street, property_path(prop.id) %><br>
+				<% end %><br>		
+		    </td>
+		<td>
+			<br><br><br>
+			<% if count > 1 %>
+			<b>Primary Property</b><br>
+			Assessed Value: $<%= number_with_delimiter(primary[0].assessed_value, :delimiter => ',') %><br>
+			Tax Rate: $<%= number_with_precision(primary[0].detail.building_value_ratio, :precision => 2 ) %><br>
+			Age: <%= primary[0].detail.age %> years old<br><br>
+			<b>Comps</b><br>
+			Average Assessed Value: $<%= number_with_delimiter(b_ave, :delimter => ',') %><br>
+			Average Tax Rate: $<%= number_with_precision(br_ave, :precision => 2 ) %><br>
+			Average Age: <%= number_with_precision(age_ave, :precision => 2 ) %> years old<br><br>
+			<b>Tax rate difference:</b> <%= number_with_precision( (100 * ( 1 - (primary[0].detail.building_value_ratio / br_ave))  ), :precision => 2 ) %> % <br>
+		    <% end %>
+		</td>
+			<td>				
+				<% if data.count == 0 %>
+					<% az = false %>
+				<% else %>
+					<% az = true %>
+				<% end %>
+				<% id = "map" + i.to_s %>
+				<% if i == 1 %>	
+					<%= gmaps(:markers     => { :data => map },
+				          :map_options => {  :auto_zoom => az, :zoom => 14, :center_on_user => false },
+				          :last_map    => @last_map ) %>
+				<% else %>
+					<%= gmaps(:markers     => { :data => map },
+				          :map_options => { :id => id, :center_on_user => false, :auto_zoom => az, :zoom => 14 },
+				          :scripts     => :none ) %>
+				<% end %>
+				<% i += 1 %>
+			</td>		
+		  </tr>
+		<% end %>	
+		</table>
+<% else %>
+	You have no properties selected<br><br>
+	<%= link_to 'Click here to add property', start_search_properties_path, :class => 'btn' %>
+<% end %>
+
+	</td>
+	<td></td></tr>
+</table>
+<br><br>
+
+
+
+
+

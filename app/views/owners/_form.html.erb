@@ -1,0 +1,38 @@
+<%= form_for @owner, :html => { :class => 'form-horizontal' } do |f| %>
+  <% if @owner.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@owner.errors.count, "error") %> prohibited this owner from being saved:</h2>
+
+      <ul>
+      <% @owner.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="control-group">
+    <%= f.label :cc_name, :class => 'control-label' %><br />
+    <div class="controls">
+    <%= f.text_field :cc_name, :class => 'text_field' %>
+	</div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :pin, :class => 'control-label' %><br />
+    <div class="controls">
+      <%= f.text_field :pin, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label 'Property ID', :class => 'control-label' %><br />
+    <div class="controls">
+      <%= f.text_field :property_id, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,59 @@
+<div class='row'>
+	<div class='span6'>
+		<ul class="breadcrumb">
+		  <li><a href="#">Properties</a></li> |
+		  <li><a href="#"><b>List All</b></a></li>
+		</ul>
+	</div>
+		<div class='span6'>
+
+			<div class="btn-group pull-right">
+			<%= link_to "Add New", my_block_map_properties_path, :class => 'btn' %>
+			</div>
+		</div>
+</div>
+
+<div class='row'>
+	<div class='span11 offset1'>
+		<div class="page-header">
+		  <h3>Properties
+			<small>	Listing<br>
+			</small>
+		  </h3>
+		</div>
+
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>ID</th>
+		      <th>Pin</th>
+		      <th>Street</th>
+		      <th>City</th>
+		      <th>Detail_PIN</th>
+		      <th>Actions</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <% @properties.each do |property| %>
+		      <tr>
+		        <td><%= property.id %></td>
+		        <td><%= link_to property.pin, property_path(property) %></td>
+		        <td><%= property.street %></td>
+		        <td><%= property.city %></td>
+		        <td><%= property.detail.pin %></td>
+		        <td>
+		          <%= link_to 'Edit', edit_property_path(property), :class => 'btn btn-mini' %>
+		          <%= link_to 'Destroy', property_path(property), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+		        </td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+		<%= page_navigation_links @properties %>
+
+		<%= link_to 'New', new_property_path, :class => 'btn btn-primary' %>
+		
+	</div>
+</div>
+

@@ -1,0 +1,245 @@
+<style type="text/css">
+
+
+.map_container {
+  width: 600px;
+}
+
+.gmaps4rails_map {
+  width: 600px;
+  height: 300px;
+}
+
+#chart1 .jqplot-point-label {
+	//  background-image:url('http://maps.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png');
+	//  width:25px;
+	//  height:29px;
+	//  border: 1.5px solid #aaaaaa;
+	//  padding: 1px 3px;
+	    color: #4BB2C5;
+		font-style:bold;
+		font-size: 12px;
+}
+
+//.table th, .table td {
+//border-top-color: #ffffff;
+//}
+
+//.table tbody tr:hover td, .table tbody tr:hover th {
+//  background-color: #ffffff;
+//}
+
+</style>
+
+<script type="text/javascript">
+
+$(window).resize(function() {
+ 		rs() ;
+		});
+	
+function rs()
+{
+		var width = $('#table1').innerWidth() * 0.8 ; // 0.48;
+//		var width = $('.container').innerWidth() * 0.7 ; // 0.48;
+		var height = width *.4 ;
+		var height_map = height * 1 ;  // 0.8 ;
+		var width_map = width * 1 ;  // 0.8 ;
+		$('#chart1').css({'height': height, 'width': width});
+		$('.map_container').css({'height': height_map, 'width': width_map});
+		$('#map').css({'height': height_map, 'width': width_map});
+		bar_anim() ;
+} ;
+	
+	$(document).ready(function(){
+		
+		rs () ;
+		bar_anim() ;
+
+	    });
+	
+
+		function bar_anim ()
+		{
+		var s1 = [<%= tax_graph_rate(@graph, @primary_id, @properties[0].detail.building_value_ratio,'     ')[1] %>];
+		var s2 = [<%= tax_graph_rate(@graph, @primary_id, 1,'      ')[0] %>];
+		var labels = ['<%= @primary_id.street %>', 'Tax Rate'];
+		var colors = <%= tax_graph_rate(@graph, @primary_id, @average,'filler')[2] %> ;
+
+				    plot1 = $.jqplot("chart1", [s2, s1], {
+					    title:'Most Favorable Comps',
+
+				        // Turns on animatino for all series in this plot.
+				        animate: true,
+				        // Will animate plot on calls to plot1.replot({resetAxes:true})
+				        animateReplot: false,
+				        cursor: {
+				            show: true,
+				            zoom: true,
+				            looseZoom: true,
+				            showTooltip: false
+				        },
+			            legend: {
+			                show: true,
+							showSwatch: true,
+							labels: labels,
+							showLabels: true,
+			                renderer: $.jqplot.EnhancedLegendRenderer,
+			                rendererOptions: {
+			                    numberRows: 1
+			                },
+			                placement: 'outsideGrid',
+			                location: 's'
+			            },
+				        series:[
+				            {
+				                pointLabels: {
+				                    show: true
+				                },
+				                renderer: $.jqplot.BarRenderer,
+				                showHighlight: false,
+//				                yaxis: 'y2axis',
+				                rendererOptions: {
+									varyBarColor : true,
+				                    // Speed up the animation a little bit.
+				                    // This is a number of milliseconds.  
+				                    // Default for bar series is 3000.  
+				                    animation: {
+				                        speed: 2500
+				                    },
+				                    barWidth: 25,
+				                    barPadding: -15,
+				                    barMargin: 0,
+				                    highlightMouseOver: false
+				                }
+				            }, 
+				            {   color:'#EAA228',
+				                rendererOptions: {
+				                    // speed up the animation a little bit.
+				                    // This is a number of milliseconds.
+				                    // Default for a line series is 2500.
+				                    animation: {
+				                        speed: 2000
+				                    }
+				                }
+				            }
+				        ],
+
+				//	    axesDefaults: {
+				//	        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+				//	        tickOptions: {
+				//	          angle: 30,
+				//            pad: 0
+				//	        }
+				//	    },
+				
+				seriesDefaults: {
+		        showMarker:false,
+		        pointLabels: {
+		          show: true,
+		          edgeTolerance: 5
+		        }},
+
+				        axesDefaults: {
+							fontSize: '14pt' },
+							seriesColors: colors,
+				        axes: {
+				            // These options will set up the x axis like a category axis.
+				            xaxis: {
+						        renderer: $.jqplot.CategoryAxisRenderer,
+						tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+						        tickOptions: {
+						          angle: 30,
+					            pad: 0
+						        }
+
+				            },
+				            yaxis: {
+					min:0,
+				                tickOptions: {
+				                    formatString: "$%'d", fontSize: '14pt'
+				                },
+				                rendererOptions: {
+				                    forceTickAt0: true
+				                }
+				            }
+				        }
+				    }).replot();
+				};
+
+	
+function plotgraphs()
+		{
+
+
+			  var cosPoints = []; 
+			  for (var i=0; i<2*Math.PI; i+=0.1){ 
+			     cosPoints.push([i, Math.cos(i)]); 
+			  } 
+			  var plot2 = $.jqplot('chart2', [cosPoints], {  
+			      series:[{showMarker:false}],
+			      axes:{
+			        xaxis:{
+			          label:'Angle (radians)'
+			        },
+			        yaxis:{
+			          label:'Cosine'
+			        }
+			      }
+			  }).replot()  ;
+
+		};
+	
+	
+</script>
+
+<%= render 'comp_menu' %>
+
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+
+				<div style="text-align:center;">
+				  <h3>Search for Favorable Comps</h3>
+				
+<%= render 'most_favor_form' %>
+				
+					<dl>
+					<dd style='font-size:16px;'>
+						<%= @properties.count - 1 %> Most Favorable Comps within:
+						<br><br> <b><%= session[:assessed_value_mult] %>%</b> of: Assessed Value: <b>$<%= number_with_delimiter(@myprop_value, :delimiter => ',') %></b>,
+						<br><br> <b><%= session[:home_size_mult] %>%</b> of: Home Size: <b><%= number_with_delimiter(@myprop_size, :delimiter => ',') %> Square Feet</b>,
+						<br><br>within <b><%= session[:age_mult] %>%</b> of <b><%= @myprop_age %></b> years old<br><br>
+						in the <b><%= @myprop_neighborhood %></b> neighborhood of <b><%= @myprop.city %></b>
+					</dd>
+							</dl>
+						</div>
+
+
+<table   style="margin: auto;">
+	<tr><td></td><td><div id='chart1'></div>
+		<br>
+		Scroll down for details..		
+	</td><td></td></tr>
+</table>
+
+<br>
+
+<%= render 'most_favor' %>
+
+<table   style="margin: auto;">
+	<div style="text-align:center;">
+	  	<br><br><h3>Comp Locations</h3>
+
+	
+	<tr><td></td><td><%= gmaps4rails(@json) %></td><td></td></tr>
+</table>
+
+
+	</td>
+	<td></td></tr>
+</table>
+<br><br>
+
+
+<br><br><br><br><br>
+

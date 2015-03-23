@@ -1,0 +1,81 @@
+
+<table  id='table1' class="table table-striped table-bordered table-condensed">
+ <thead>
+  <tr>	<th>Rank</th>
+        <th>Street_Address</th>
+		<th>Age</th>
+		<th>Class</th>
+		<th>Nhood</th>
+		<th>Ext Constr</th>
+		<th>Assessed Value</th>
+		<th>Building Size</th>        
+		<th>Building Rate</th>        
+		<th>Land Rate</th> 
+		<th>Distance to Primary</th>
+		<th>Comp Member</th>       
+  </tr>
+  </thead>
+  <tbody>
+	
+<!--
+	<tr>
+	 <td style='text-align:right'><span class="badge badge-info"></span></td>
+     <td><%= @properties[0].street %></a></td>
+	<td style='text-align:right'><%= @properties[0].detail.age %></td>
+	<td style='text-align:right'><%= @properties[0].class_code %></td>
+	<td style='text-align:right'><%= @properties[0].detail.neighborhood %></td>
+	<td><%= @properties[0].detail.ext_construction %></td>		
+     <td style='text-align:right'>$<%= number_with_delimiter(@properties[0].assessed_value, :delimiter => ',' ) %></td>
+	<td style='text-align:right'><%= number_with_delimiter(@properties[0].detail.building_size, :delimiter => ',' ) %></td>
+     <td style='text-align:right'><%= number_with_precision(@properties[0].detail.building_value_ratio, :precision => 2 ) %></td>
+     <td style='text-align:right'><%= number_with_precision(@properties[0].detail.land_value_ratio, :precision => 2 ) %></td>
+	<td style='text-align:right'><%= number_with_precision(haversine_distance( @properties[0].latitude, @properties[0].longitude, @mylat, @mylon ), :precision => 2 ) %> miles</td>
+	<th>Primary</th>
+    </tr>
+
+-->
+
+   
+  <% @properties[1..@properties.length].each_with_index do |property, i| -%>
+   <tr>
+	 
+	 <td style='text-align:right'>
+		<% if property == @primary_id %>		
+			<span class="badge badge-info"></span>
+		<% end %>
+		&nbsp;<%= i + 1 %></td>
+     <td><a href="/properties/<%= property.id %>"  rel="popover" data-content="<%= class_code_lu(property.class_code) %><br>PIN: <%= property.pin %>" data-original-title="Classification: <%= property.class_code %><br>Neighborhood: <%= property.detail.neighborhood %>"><%=property.street %></a></td>
+	<td style='text-align:right'><%= property.detail.age %></td>
+	<td style='text-align:right'><%= property.class_code %></td>
+	<td style='text-align:right'><%= property.detail.neighborhood %></td>
+	<td><%= property.detail.ext_construction %></td>		
+     <td style='text-align:right'>$<%= number_with_delimiter(property.assessed_value, :delimiter => ',' ) %></td>
+	<td style='text-align:right'><%= number_with_delimiter(property.detail.building_size, :delimiter => ',' ) %></td>
+     <td style='text-align:right'><%= number_with_precision(property.detail.building_value_ratio, :precision => 2 ) %></td>
+     <td style='text-align:right'><%= number_with_precision(property.detail.land_value_ratio, :precision => 2 ) %></td>
+	<td style='text-align:right'><%= number_with_precision(haversine_distance( property.latitude, property.longitude, @mylat, @mylon ), :precision => 2 ) %> miles</td>
+	<td><%= comp_member(property.pin, property.id, @list_num, @primary_id.id).html_safe %></td>
+    </tr>		
+    <% end -%>
+  <tr>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td><%= link_to 'Add all to Comps', add_all_props_myprops_path(:prop_list => @properties[1..@properties.length], :list_num => @list_num, :id => @primary_id), :class => 'btn btn-warning btn-mini' %></td>
+  </tr>
+
+   </tbody>
+</table>
+
+
+
+
+<br><br><br>

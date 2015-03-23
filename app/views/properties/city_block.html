@@ -1,0 +1,91 @@
+<style type="text/css">
+.map_container { width: 600px; }
+.gmaps4rails_map { width: 600px; height: 500px; }
+</style>
+
+
+<div class='row'>
+	<div class='span6'>
+		<ul class="nav nav-tabs">
+		  <li><a href="#">Home</a></li>
+		  <li><a href="#">Help</a></li>
+		  <li class="dropdown">
+		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dropdown <b class="caret"></b></a>
+		    <ul class="dropdown-menu">
+		      <li><a href="#">Action</a></li>
+		      <li><a href="#">Another action</a></li>
+		      <li><a href="#">Something else here</a></li>
+		      <li class="divider"></li>
+		      <li><a href="#">Separated link</a></li>
+		    </ul>
+		  </li>
+		  <li class="dropdown active">
+		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Search Properties <b class="caret bottom-up"></b></a>
+		    <ul class="dropdown-menu bottom-up pull-right">
+		      <li><a href="#">Action</a></li>
+		      <li><a href="#">Another action</a></li>
+		      <li><a href="#">Something else here</a></li>
+		      <li class="divider"></li>
+		      <li><a href="#">Separated link</a></li>
+		    </ul>
+		  </li>
+		</ul>
+	</div>
+		<div class='span6'>
+
+			<div class="btn-group pull-right">
+			<%= link_to "List", myprops_path, :class => 'btn' %>
+			<%= link_to "Summary" , comp_analysis_summary_properties_path(:list_num => @list_num ), :class => 'btn active' %>
+			<%= link_to "Detailed" , comp_analysis_building_rate_properties_path(:list_num => @list_num ), :class => 'btn' %>
+			</div>
+		</div>
+</div>
+
+	
+<div class='row'>
+	<div class='span10 offset1'>
+
+<table>
+	<tr>
+		<td><%= gmaps4rails(@json) %></td>
+		
+		<td>Average: $<%= number_with_delimiter(@stats[0],:delimiter => ',') %><br>
+			Number: <%= number_with_delimiter(@stats[1],:delimiter => ',') %><br>
+			<table class="table table-striped table-bordered table-condensed">
+					<tr><th><img src=<%= @legend[4] %> />Lowest Ave</th><td>< $<%= number_with_delimiter(@stats[2],:delimiter => ',') %></td></tr>
+					<tr><th><img src=<%= @legend[3] %> />Below Ave</th><td>< <%= number_to_currency(@stats[3]) %></td></tr>
+					<tr><th><img src=<%= @legend[2] %> />Medium Ave</th><td>< <%= number_to_currency(@stats[4]) %></td></tr>
+					<tr><th><img src=<%= @legend[1] %> />High Ave</th><td>< <%= number_to_currency(@stats[5]) %></td></tr>
+					<tr><th><img src=<%= @legend[0] %> />Highest Ave</th><td>> <%= number_to_currency(@stats[5]) %></td><tr>
+					</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<br>
+<br>
+<table class="table table-striped table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th>Rank</th>
+			<th>Block</th>
+			<th>Properties</th>
+			<th>Average Value</th>
+			<th>Highest Value</th>
+			<th>Address</th>
+		<tr>
+	</thead>
+<% @blocks.each_with_index do |block, i| %>
+		<tr>
+			<td><%= i %></td>
+			<td><%= block[0] %></td>
+			<td><%= block[1] %></td>
+			<td><img src=<%= ave_value_legend(block[2],@stats) %> /><%= number_to_currency(block[2]) %></td>
+			<td><%= number_to_currency(block[3]) %></td>
+			<td><%= link_to block[4], property_path(block[5])%>
+		</tr>
+		
+<% end %>
+
+</div>
+</div>

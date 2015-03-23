@@ -1,0 +1,99 @@
+<div class='small-menu'>
+  <p>  
+		<%= link_to "Block" , comp_block_summary_properties_path(:id => @myprop, :list_num => @list_num ), :class => 'btn active' %>
+		<%= link_to 'Comps', comp_analysis_summary_properties_path(:list_num => @list_num), :class => 'btn' %>	
+  </p>
+</div>
+
+		
+<div class='top-menu'>
+	<p>		
+		<%= link_to "Summary" , comp_block_summary_properties_path(:id => @myprop ), :class => 'btn' %>
+		<%= link_to "Map" , my_block_map_properties_path(:id => @myprop ), :class => 'btn' %>
+		<%= link_to "Taxes" , my_block_analysis_summary_properties_path(:id => @myprop), :class => 'btn active' %>
+		<%= link_to "Analysis" , my_block_analysis_properties_path(:id => @myprop), :class => 'btn' %>
+		
+		    <div class="btn-group pull-right">
+		      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		        <i class="icon-list"></i>	
+				List: <%= @list_num %>
+		          <span class="caret"></span>
+		        </a>
+		        <ul class="dropdown-menu">
+				  <li><%= link_to "List 1", comp_analysis_summary_properties_path(:list_num => 1) %></li>
+				  <li><%= link_to "List 2", comp_analysis_summary_properties_path(:list_num => 2) %></li>
+		        </ul>
+				<%= link_to 'View', comp_analysis_summary_properties_path(:list_num => @list_num), :class => 'btn disabled' %>	
+				<%= link_to 'Edit', details_myprops_path(:list_num => @list_num), :class => 'btn disabled' %>	
+			</div>		
+  </p>
+</div>
+
+		<div class="banner"><b>Primary Property:</b> <%= @myprop.street %>, <%= @myprop.city %> <b>Block:</b> <%= @myprop.pin[0..8] %><hr><br>
+		</div>
+		<br>
+
+			<div class='row'>
+				<div class='span5'>
+					<table>
+					<tr><td><dt>Properties on Block</dt></td>
+						<td style='text-align:right'><dd><%= @cas['number_comps'] %></dd></td></tr>
+					<tr><td><br></td>
+						<td></td></tr>
+
+					<tr><td><dt>Property Values:</dt><br></td>
+
+					<tr><td><dd>Highest:</dd></td>
+						<td style='text-align:right'><dd><a href="#"  rel="popover" data-content="<%= @value[0][:street] %><br>" data-original-title="Address">$<%= number_with_delimiter(@value[0][:assessed_value], :delimiter => ',') %></dd></td></tr>
+
+
+
+
+
+
+						<tr><td><dd>Average:</dd></td>
+							<td style='text-align:right'><dd>$<%= number_with_delimiter(@average_value.to_i, :delimiter => ',') %></dd></td></tr>
+
+						<tr><td><dd>Lowest:</dd></td>
+							<td style='text-align:right'><dd><a href="#"  rel="popover" data-content="<%= @value.last[:street] %><br>" data-original-title="Address">$<%= number_with_delimiter(@value.last[:assessed_value], :delimiter => ',') %></dd></td></tr>
+						<tr><td><br></td>
+							<td></td></tr>
+
+					<tr><td><br></td>
+						<td></td></tr>
+					</table>
+				</div>
+	
+				<div class='span5'>
+					<table>
+	
+					<tr><td><dt>Taxes Rates:</dt></td>
+						<td></td></tr>
+					<tr><td><dd>Building Tax Rate:</dd></td>
+						<td style='text-align:right'><dd><%= number_to_currency(@cas['my_building_ratio']) %></dd></td></tr>
+
+					<tr><td><dd>Comp Average Building Rate:</dd></td>
+						<td style='text-align:right'><dd><%= number_to_currency(@cas['average_building_ratio']) %></dd></td></tr>
+						<tr><td><dd>My Penalty:</dd></td>
+						<td style='text-align:right'><%= number_with_precision(@cas['building_ratio_diff_percentage'], :precision => 2 ) %>%</dd></td></tr>
+						<tr><td><dd>Annual Penalty:</dd></td>
+						<td style='text-align:right'><%= number_to_currency(@cas['annual_penalty_building'] ) %></dd></td></tr>
+					<tr><td><br></td>
+						<td></td></tr>
+
+					<tr><td><dd>Land Tax Rate:</dd></td>
+						<td style='text-align:right'><dd><%= number_to_currency(@cas['my_land_ratio']) %></dd></td></tr>
+
+					<tr><td><dd>Comp Average Building Rate:</dd></td>
+						<td style='text-align:right'><dd><%= number_to_currency(@cas['average_land_ratio']) %></dd></td></tr>
+						<tr><td><dd>My Penalty:</dd></td>
+						<td style='text-align:right'><%= number_with_precision(@cas['land_ratio_diff_percentage'], :precision => 2 ) %>%</dd></td></tr>
+						<tr><td><dd>Annual Penalty:</dd></td>
+						<td style='text-align:right'><%= number_to_currency(@cas['annual_penalty_land']) %></dd></td></tr>		
+					</table>
+				</div>
+			</div>
+
+	
+<br><br>
+

@@ -1,0 +1,129 @@
+<%= form_for @property, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> /Property</legend>
+
+    <div class="control-group">
+      <%= f.label :pin, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :pin, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :area, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :area, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :subdivision, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :subdivision, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :block, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :block, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :parcel, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :parcel, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :unit, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :unit, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :street, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :street, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :city, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :city, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :country, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :country, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :zip, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :zip, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :latitude, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :latitude, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :longitude, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :longitude, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :gmaps, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :gmaps, :class => 'check_box' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :neighborhood, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :neighborhood, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :class_code, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :class_code, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :assessed_value, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :assessed_value, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :category, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.number_field :category, :class => 'number_field' %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', properties_path, :class => 'btn' %>
+    </div>
+  </fieldset>
+<% end %>

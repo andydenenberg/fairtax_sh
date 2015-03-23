@@ -1,0 +1,13 @@
+Use this README file to introduce your application and point to useful places in the API for learning more.
+Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+
+rails g scaffold property pin:string area:integer subdivision:integer block:integer parcel:integer unit:integer street:string city:string country:string zip:string latitude:float longitude:float gmaps:boolean neighborhood:string class_code:string assessed_value:string category:integer
+
+rails g scaffold detail pin:string city:string township:string neighborhood:string tax_code:string classification:string current_year:string current_land:integer current_building:integer prior_year:string prior_land:integer prior_building:integer prior_value:integer current_value:integer description:string res_type:string use:string apartments:string ext_construction:string full_bath:integer half_bath:integer basement:string attic:string central_air:string fireplace:string garage:string age:integer land_size:integer building_size:integer certified:string land_value_ratio:float building_value_ratio:float property_id:integer
+
+rails g scaffold class_code cc:string description:string orig_desc:string category:string comments:string value:string
+
+rails g scaffold myprop pin:string street:string city:string status:string user_id:integer
+
+rails g scaffold users email:string encrypted_password:string reset_password_sent_at:datetime reset_password_token:string remember_created_at:datetime sign_in_count:integer current_sign_in_at:datetime last_sign_in_at:datetime current_sign_in_ip:string last_sign_in_ip:string
+

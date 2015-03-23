@@ -1,0 +1,39 @@
+<%= form_for @property, :url => search_properties_path do |f| -%>
+<table class='table-bordered'>
+	<tr>
+		<td>
+<table>
+	<tr>
+		<th  style='border-left-color: #ffffff;' class='well'>Search for Address or PIN:</th>
+	</tr>
+	<tr>
+		<td  style='border-left-color: #ffffff;'>		
+			<div>
+			<%= f.text_field :street, :value => session[:search_street], :class => 'input-medium search-query' %> <%= button_tag "Search", :class => "btn btn-success" %>	
+			</div>
+		</td>
+	</tr>
+</table>
+</td>
+<td>
+<table>
+	<tr>
+		<th  style='border-left-color: #ffffff;'>City:</th>
+    	<th  style='border-left-color: #ffffff;'>Category:</th>
+		<th  style='border-left-color: #ffffff;'>Num. to Show</th>
+	</tr>
+	<tr>
+		<td  style='border-left-color: #ffffff;'><%= f.select :city, cities_for_select, {:selected => session[:search_city]},{:class => 'span2'} %></td>
+		<td  style='border-left-color: #ffffff;'><%= f.select :category, categories_for_select, {:selected => session[:search_category]},{:class => 'span2'} %></td>
+		<td  style='border-left-color: #ffffff;'><%= select_tag :zip, options_for_select(['', '/n'], session[:search_show_num]), :style => '  width: 110px;' %></td>
+	</tr>
+</table>
+		</td>
+	</tr>
+</table>
+	
+<% end -%>
+
+
+
+

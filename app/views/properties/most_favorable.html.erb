@@ -1,0 +1,487 @@
+
+
+<style type="text/css">
+
+
+.map_container {
+  width: 600px;
+}
+
+.gmaps4rails_map {
+  width: 600px;
+  height: 600px;
+}
+
+#chart1 .jqplot-point-label {
+	//  background-image:url('http://maps.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png');
+	//  width:25px;
+	//  height:29px;
+	//  border: 1.5px solid #aaaaaa;
+	//  padding: 1px 3px;
+	    color: #4BB2C5;
+		font-style:bold;
+		font-size: 12px;
+}
+
+//.table th, .table td {
+//border-top-color: #ffffff;
+//}
+
+//.table tbody tr:hover td, .table tbody tr:hover th {
+//  background-color: #ffffff;
+//}
+
+.slider_table
+{
+	text-align:center;
+	vertical-align:middle;
+}
+.slider_range
+{
+	margin-left:auto;
+	margin-right:auto;
+}
+.slider_text
+{
+	border:0;
+	color:#f6931f;
+	font-weight:bold;
+	width:180px;	
+}
+.percent_text
+{
+	border:0;
+	color:black;
+}
+
+
+
+</style>
+
+<script type="text/javascript">
+
+ var assessed_value_mult_low = <%= session[:assessed_value_mult_low] %> ;
+ var assessed_value_mult_hi = <%= session[:assessed_value_mult_hi] %> ;
+ var home_size_mult_hi = <%= session[:home_size_mult_hi] %> ;
+ var home_size_mult_low = <%= session[:home_size_mult_low] %> ;
+ var age_mult_hi = <%= session[:age_mult_hi] %> ;
+ var age_mult_low = <%= session[:age_mult_low] %> ;
+
+// var assessed_value_mult_low = 247372 ;
+// var assessed_value_mult_hi = 371059 ;
+// var home_size_mult_hi = 7989 ;
+// var home_size_mult_low = 5326 ;
+// var age_mult_hi = 14 ;
+// var age_mult_low = 9 ;
+
+var nhood_mult  ;
+var class_mult  ;
+var ext_constr_mult  ;
+
+var raw_json ;
+
+
+$(document).ready(function(){		
+	$("#slider").slider();
+	processChange('table') ;
+	table_show() ;
+	
+	var width = $('.container').innerWidth() * 0.95;
+	var height = width / 2 ;
+	$('#map').css({'height': height, 'width': width});
+	
+    });
+	
+
+Number.prototype.toCurrencyString=function(){
+        return this.toFixed(0).replace(/(\d)(?=(\d{3})+\b)/g,'$1,');
+    }
+
+function slider(slider, min, max, val_low, val_hi, text_field, currency, tail ) {
+	$( slider ).slider({
+//		orientation: "vertical",
+		range: true,
+		min: min,
+		max: max,
+		values: [ val_low, val_hi ],
+		slide: function( event, ui ) {
+			slide_event(text_field, ui, currency, tail)	;
+				}
+	});
+} ;
+
+function slide_event(text_field, ui, currency, tail) {
+	document.getElementById(text_field).innerHTML = ( currency + ui.values[0].toCurrencyString() + " - " + currency + 
+			ui.values[1].toCurrencyString() + tail );
+	if (text_field == "amount") {
+		document.getElementById('av_percent').innerHTML = 
+			( (ui.values[0]/<%= @primary_id.assessed_value %>)*100).toFixed(0) + '% - ' +
+			( (ui.values[1]/<%= @primary_id.assessed_value %>)*100).toFixed(0) + '%' ;
+		assessed_value_mult_low = ui.values[ 0 ] ;
+		assessed_value_mult_hi = ui.values[ 1 ] ;
+	}
+	if (text_field == "amount1") {
+		document.getElementById('bs_percent').innerHTML = 
+			( (ui.values[0]/<%= @primary_id.detail.building_size %>)*100).toFixed(0) + '% - ' +
+			( (ui.values[1]/<%= @primary_id.detail.building_size %>)*100).toFixed(0) + '%' ;
+		home_size_mult_low = ui.values[ 0 ] ;
+		home_size_mult_hi = ui.values[ 1 ] ;
+	}
+	if (text_field == "amount2") {
+		$('#age_percent').val(( (ui.values[0]/<%= @primary_id.detail.age %>)*100).toFixed(0) + '% - ' +
+						  ( (ui.values[1]/<%= @primary_id.detail.age %>)*100).toFixed(0) + '%') ;
+		document.getElementById('age_percent').innerHTML = 
+			( (ui.values[0]/<%= @primary_id.detail.age %>)*100).toFixed(0) + '% - ' +
+			( (ui.values[1]/<%= @primary_id.detail.age %>)*100).toFixed(0) + '%' ;
+		age_mult_low = ui.values[ 0 ] ;
+		age_mult_hi = ui.values[ 1 ] ;
+	}
+};
+
+  $(function() {
+	
+slider("#slider-range", 0, 500000, assessed_value_mult_low, assessed_value_mult_hi, "amount", '$', '' ) ;
+slider("#slider-range1", 0, 10000, home_size_mult_low, home_size_mult_hi, "amount1", '', ' sq. Ft.' ) ;
+slider("#slider-range2", 0, 100, age_mult_low, age_mult_hi , "amount2", '', ' years' ) ;
+	
+	document.getElementById('amount').innerHTML = ( "$" + $( "#slider-range" ).slider( "values", 0 ).toCurrencyString() +
+		" - $" + $( "#slider-range" ).slider( "values", 1 ).toCurrencyString() );
+	document.getElementById('av_percent').innerHTML = 
+		( ($( "#slider-range" ).slider( "values", 0 )/<%= @primary_id.assessed_value %>)*100).toFixed(0) + '% - ' +
+		( ($( "#slider-range" ).slider( "values", 1 )/<%= @primary_id.assessed_value %>)*100).toFixed(0) + '%' ;
+
+	document.getElementById('amount1').innerHTML = ( $( "#slider-range1" ).slider( "values", 0 ).toCurrencyString() +
+		" - " + $( "#slider-range1" ).slider( "values", 1 ).toCurrencyString() + ' sq. Ft.') ;
+	document.getElementById('bs_percent').innerHTML = 
+		( ($( "#slider-range1" ).slider( "values", 0 )/<%= @primary_id.detail.building_size %>)*100).toFixed(0) + '% - ' +
+		( ($( "#slider-range1" ).slider( "values", 1 )/<%= @primary_id.detail.building_size %>)*100).toFixed(0) + '%' ;
+		
+	document.getElementById('amount2').innerHTML = ( $( "#slider-range2" ).slider( "values", 0 ) +
+		" - " + $( "#slider-range2" ).slider( "values", 1 ) + ' years' );
+	document.getElementById('age_percent').innerHTML = 
+		( ($( "#slider-range2" ).slider( "values", 0 )/<%= @primary_id.detail.age %>)*100).toFixed(0) + '% - ' +
+		( ($( "#slider-range2" ).slider( "values", 1 )/<%= @primary_id.detail.age %>)*100).toFixed(0) + '%' ;
+			
+});
+
+function table_show() {
+	document.getElementById('chart1').style.display = 'none' ;
+	document.getElementById('map').style.display = 'none' ;
+	document.getElementById('results').style.display = 'block' ;
+	document.getElementById('t_show').className = 'active';	
+	document.getElementById('g_show').className = '';	
+	document.getElementById('m_show').className = '';
+	processChange('table') ;		
+}
+function graph_show() {
+	document.getElementById('results').style.display = 'none' ;		
+	document.getElementById('map').style.display = 'none' ;
+	document.getElementById('chart1').style.display = 'block' ;
+	document.getElementById('t_show').className = '';	
+	document.getElementById('g_show').className = 'active';	
+	document.getElementById('m_show').className = '';	
+	processChange('graph') ;	
+}
+function map_show() {
+	processChange('map') ;	
+	document.getElementById('results').style.display = 'none' ;		
+	document.getElementById('chart1').style.display = 'none' ;
+	document.getElementById('map').style.display = 'block' ;
+	document.getElementById('t_show').className = '';	
+	document.getElementById('g_show').className = '';	
+	document.getElementById('m_show').className = 'active';	
+}
+
+function processChange(mode) {
+    // make a GET call and replace the contents
+//   WhichTimeFrame = document.getElementById('time_frame').value ;
+    var id = '<%= @primary_id.id %>' ;
+	var list_num = '<%= @list_num %>' ;
+	
+	nhood_mult = $('#nhood').is(':checked');
+	class_mult = $('#class').is(':checked');
+	ext_constr_mult = $('#ext_constr').is(':checked');
+		
+	if (mode == 'table')
+	{				
+    $.get('<%= search_most_favorable_properties_path %>', 
+          { assessed_value_mult_low:assessed_value_mult_low,
+			assessed_value_mult_hi:assessed_value_mult_hi,
+			home_size_mult_low:home_size_mult_low, home_size_mult_hi:home_size_mult_hi,
+			age_mult_low:age_mult_low, age_mult_hi:age_mult_hi,
+			nhood_mult:nhood_mult, class_mult:class_mult, ext_constr_mult:ext_constr_mult,
+			id:id , list_num:list_num},
+                  function(data) {
+            $("#results").html(data);
+          });
+	} else if ( mode == 'map')
+	{
+		document.getElementById('map').style.display = 'none' ;
+		
+	$.getJSON("/properties/search_most_favorable.json",
+			{ assessed_value_mult_low:assessed_value_mult_low,
+				assessed_value_mult_hi:assessed_value_mult_hi,
+				home_size_mult_low:home_size_mult_low, home_size_mult_hi:home_size_mult_hi,
+				age_mult_low:age_mult_low, age_mult_hi:age_mult_hi,
+				nhood_mult:nhood_mult, class_mult:class_mult, ext_constr_mult:ext_constr_mult,
+				id:id , list_num:list_num},
+				   function(json_raw){
+				raw_json = json_raw
+				update_map() ;
+				
+		});
+	} else if ( mode == 'graph')
+	{
+    $.getJSON('<%= graph_most_favorable_properties_path %>', 
+          { assessed_value_mult_low:assessed_value_mult_low,
+			assessed_value_mult_hi:assessed_value_mult_hi,
+			home_size_mult_low:home_size_mult_low, home_size_mult_hi:home_size_mult_hi,
+			age_mult_low:age_mult_low, age_mult_hi:age_mult_hi,
+			nhood_mult:nhood_mult, class_mult:class_mult, ext_constr_mult:ext_constr_mult,
+			id:id , list_num:list_num},
+                  function(graph_data) {
+				data = graph_data ; 
+				plotgraphs(data[0],data[1],data[2], data[3], data[4]) ;						
+//				$("#graph_data").text(data[4]);						
+		});
+	}
+}
+	
+function update_map () {				
+	Gmaps.map = new Gmaps4RailsGoogle();
+	Gmaps.map.map_options.auto_adjust = true;
+	Gmaps.map.map_options.auto_zoom = true;
+//	Gmaps.map.map_options.zoom  = 15 ;
+	Gmaps.map.initialize();
+	Gmaps.map.markers = [{ }];
+	Gmaps.map.markers = raw_json;
+	Gmaps.map.markers_conf.do_clustering = true;
+	Gmaps.map.create_markers();
+	Gmaps.map.adjustMapToBounds();
+//	Gmaps.map.callback();
+	document.getElementById('map').style.display = 'block' ; 
+	var width = $('.container').innerWidth() * 0.95;
+	var height = width / 2 ;
+	$('#map').css({'height': height, 'width': width});
+//	google.maps.event.trigger(map, "resize");
+		
+}
+
+	
+function plotgraphs(street, building_vr, average, color, marker)
+		{
+			var width = $('.container').innerWidth() * 0.95;
+			var height = width / 2 ;
+			$('#chart1').css({'height': height, 'width': width});
+			
+			var showlabel = false ;  // do not display x-axis if too crowded
+			if ( building_vr.length <= 25 )
+			{
+				showlabel = true ;
+			}
+			
+			var bvr = new Array ;
+			var ave = new Array ;
+			for ( i=0; i<=street.length; i++ )
+			{
+				bvr.push([ street[i] , building_vr[i], marker[i] ]);
+				ave.push([ street[i] , average[i], '' ]);
+			} 											
+		var labels = ['<%= @primary_id.street %>', 'Comp Average'];
+		var s1 = bvr ;
+		var s2 = ave ;
+		var colors = color ;				
+	    plot1 = $.jqplot("chart1", [s1, s2], {
+		    title:'Building Tax Rate',
+
+	        // Turns on animatino for all series in this plot.
+	        animate: true,
+	        // Will animate plot on calls to plot1.replot({resetAxes:true})
+	        animateReplot: false,
+	        cursor: {
+	            show: true,
+	            zoom: true,
+	            looseZoom: true,
+	            showTooltip: false
+	        },
+            legend: {
+                show: true,
+				showSwatch: true,
+				labels: labels,
+				showLabels: true,
+                renderer: $.jqplot.EnhancedLegendRenderer,
+                rendererOptions: {
+                    numberRows: 1
+                },
+                placement: 'outsideGrid',
+                location: 's'
+            },
+	        series:[
+	            {
+	                pointLabels: {
+	                    show: true
+	                },
+	                renderer: $.jqplot.BarRenderer,
+	                showHighlight: false,
+//	                yaxis: 'y2axis',
+	                rendererOptions: {
+						varyBarColor : true,
+	                    // Speed up the animation a little bit.
+	                    // This is a number of milliseconds.  
+	                    // Default for bar series is 3000.  
+	                    animation: {
+	                        speed: 2500
+	                    },
+	                    barWidth: 25,
+	                    barPadding: -15,
+	                    barMargin: 0,
+	                    highlightMouseOver: false
+	                }
+	            }, 
+	            {   color:'#EAA228',
+	                rendererOptions: {
+	                    // speed up the animation a little bit.
+	                    // This is a number of milliseconds.
+	                    // Default for a line series is 2500.
+	                    animation: {
+	                        speed: 2000
+	                    }
+	                }
+	            }
+	        ],
+
+	//	    axesDefaults: {
+	//	        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+	//	        tickOptions: {
+	//	          angle: 30,
+	//            pad: 0
+	//	        }
+	//	    },
+	seriesDefaults: {
+       showMarker:false,
+       pointLabels: {
+         show: true,
+         edgeTolerance: 5
+       }},
+	        axesDefaults: {
+				fontSize: '14pt' },
+				seriesColors: colors,
+	        axes: {
+	            // These options will set up the x axis like a category axis.
+	            xaxis: {
+			        renderer: $.jqplot.CategoryAxisRenderer,
+			tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+			        tickOptions: {
+					showLabel: showlabel,
+			          angle: 30,
+		            pad: 0
+			        }
+	            },
+	            yaxis: {
+		min:0,
+	                tickOptions: {
+	                    formatString: "$%'d", fontSize: '14pt'
+	                },
+	                rendererOptions: {
+	                    forceTickAt0: true
+	                }
+	            }
+	        }
+	    }).replot();
+		
+	};
+			
+</script>
+
+<%= render 'comp_menu' %>
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+		<div style="text-align:center;">
+		  <h3>Search for Favorable Comps</h3>
+		
+<table>
+  <tr>
+	<td class='slider_table'>
+		<div style='padding:10px;'>
+			Assessed Value<br>
+			<b>$<%= number_with_delimiter(@primary_id.assessed_value, :delimter => ',' ) %></b>
+		<label for="amount">Range:</label>
+		<p><div id="slider-range" class='slider_range'></div></p>
+		<p id="amount" class='slider_text'></p>
+		<p id='av_percent' class='percent_text'> </p>
+		</div>
+	</td>
+	<td class='slider_table'>
+		<div style='padding:10px;'>
+			Building Size<br>
+			<b><%= number_with_delimiter(@primary_id.detail.building_size, :delimter => ',' ) %> Sq. Ft.</b>
+		<label for="amount1">Range:</label>
+		<p><div id="slider-range1" class='slider_range'></div></p>
+		<p id="amount1" class='slider_text'></p>
+		<p id='bs_percent' class='percent_text'> </p>
+		</div>
+	</td>
+	<td class='slider_table'>
+		<div style='padding:10px;'>
+			Age<br>
+			<b><%= @primary_id.detail.age %> Years</b>
+		<label for="amount2">Range:</label>
+		<p><div id="slider-range2" class='slider_range'></div></p>
+		<p id="amount2" class='slider_text'></p>
+		<p id='age_percent' class='percent_text'> </p>
+		</div>
+	</td>
+	<td class='slider_table'style='vertical-align:middle;'>
+		<div style='padding:10px;'>
+			Neighborhood<br>
+			<b><%= @primary_id.detail.neighborhood %></b><br>
+		<label>Same</label>
+		<input type="checkbox" id="nhood" /><br>
+		</div>
+	</td>
+	<td class='slider_table'style='vertical-align:middle;'>
+		<div style='padding:10px;'>
+			Classification<br>
+			<b><%= @primary_id.class_code %></b><br>
+		<label>Same </label>
+		<input type="checkbox" id="class" />
+		</div>
+	</td>
+	<td class='slider_table'style='vertical-align:middle;'>
+		<div style='padding:10px;'>
+			External Construction<br>
+			<b><%= @primary_id.detail.ext_construction %></b><br>
+		<label>Same </label>
+		<input type="checkbox" id="ext_constr" />
+		</div>			
+	</td>
+	<td>
+		<button id='get_data' onclick='processChange("table")' class='btn btn-success'>Get New Data</button>
+	</td>			
+</tr>	
+</table>
+
+
+<br>
+
+<ul class="nav nav-pills">
+  <li id='t_show'><a href="JavaScript:;" onmousedown="table_show()">Table</a></li>
+  <li id='g_show'><a href="JavaScript:;" onmousedown="graph_show()">Graph</a></li>
+  <li id='m_show'><a href="JavaScript:;" onmousedown="map_show()">Map</a></li>
+</ul>
+
+
+
+			<div id='chart1' style='height:500px;width:900px;' ></div>
+			<%= gmaps4rails(@json) %>
+		    <div id='results'></div>
+				
+
+	</td>
+	<td></td></tr>
+</table>
+<br><br>
+
+
+

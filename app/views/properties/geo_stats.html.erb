@@ -1,0 +1,85 @@
+<div class='row'>
+	<div class='span6'>
+		<ul class="breadcrumb">
+		  <li><a href="#">Towns</a></li> |
+		  <li><a href="#"><%= @city %></a></li>
+		</ul>
+	</div>
+
+</div>
+
+<div class='row'>
+	<div class='span10 offset1'>
+		
+		<h3><%= @city %></h3>
+
+		<%= link_to "Block Analysis", city_block_properties_path(:city => @city), :class => 'btn' %><br>
+
+		<b>Total Properties: </b><%= @total.length %><br>
+		<b>Residential: </b><%= @residential.length %><br>
+		<b>Most Expensive Residential Property:</b> <%= number_to_currency(@maximum) %><br>
+		<%= @max_record.street %><br>
+		<b>Outside City Boundaries: </b>
+		<%= @outside.length %><br>
+		<b>Limits of City Boundaries: </b>
+		<%= @limits.inspect %><br><br>
+
+		<table  class="table table-striped table-bordered table-condensed" >
+			<tr>
+				<th>Class Code</th>
+				<th>Count</th>
+				<th>Total Value</th>
+				<th>Description</th>
+			</tr>
+		<% @class_code_values.each do |cc| %>
+			<tr>
+				<td><%= cc[0] %></td>
+				<td><%= cc[1][0] %></td>
+				<td align='right' ><%= number_to_currency(cc[1][1]) %></td>
+				<td><%= class_code_lu(cc) %></td>
+			</tr>
+		<% end %>
+		</table>
+
+		<br>
+
+
+		<br><br>
+		<h3>Outside town Boundaries</h3>
+		<table class="table table-striped table-bordered table-condensed" >
+		  <tr>
+			<th>ID</th>
+			<th>Pin</th>
+		    <th>Street</th>
+			<th>City</th>
+			<th>Class Code</th>
+		    <th>Detail ID</th>
+		    <th></th>
+		  </tr>
+		<br>
+		<% @properties.each do |property| %>
+		  <tr>
+			<td><%= property.id %></td>
+			<td><%= property.pin %></td>
+			<td><%= property.street %></td>
+			<td><%= property.city%></td>
+			<td><%= property.class_code %></td>
+			<td><%= property.detail.id %></td>
+		    <td><%= link_to 'Show', property %></td>
+		    <td><%= link_to 'Edit', edit_property_path(property) %></td>
+		    <td><%= link_to 'Destroy', property, confirm: 'Are you sure?', method: :delete %></td>
+		  </tr>
+		<% end %>
+		</table>
+		<%= will_paginate @properties %>
+		<br />
+
+
+		<h4>Missing Geocode: </h4> <%= @missing_geo.length %><br><br>
+		<% @missing_geo.each do |prop| %>
+		<%= prop.street %> - <%= prop.assessed_value %> - <%= prop.class_code %><br>
+		<% end %><br>
+
+	</div>
+</div>
+

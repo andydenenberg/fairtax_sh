@@ -1,0 +1,45 @@
+<div class='banner-blank-strip'></div>
+
+<div class='small-menu'>
+	    <div class="btn-group">
+	      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	        <i class="icon-list"></i>	
+			List: <%= @list_num %>
+	          <span class="caret"></span>
+	        </a>
+	        <ul class="dropdown-menu">
+				<li> Change List</li>
+				<% @lists.each_with_index do |list, i| %>
+				 <li><%= link_to "List " + list[0].to_s, comp_analysis_summary_properties_path(:id => @primary_id, :list_num => i + 1 ) %></li>
+				<% end %>
+				  <li class="divider"></li>
+		        <li><%= link_to 'Edit list ' + @list_num.to_s, details_myprops_path(:id => @primary_id,:list_num => @list_num) %></li>
+				  <li class="divider"></li>
+				<%= link_to "Create New List", start_search_properties_path, :class => 'btn' %>
+
+	        </ul>
+
+<!--				< %= link_to "Create New List", start_search_properties_path, :class => 'btn' %>
+-->
+			<p style='font-size:18px;margin-left:10px;'><b>Primary Property:</b> <%= @primary_id.street %>, <%= @primary_id.city %></p>			
+		</div>	
+			
+</div>
+
+<div class='bc-menu'>
+  	<p>
+	<%= block_comp_menu(@primary_id.id, @list_num).html_safe %>  
+  	</p>
+
+	<p style='margin-left:20px;'>
+	<%= sub_menu(@primary_id.id, @list_num).html_safe %>
+	</p>
+
+<% if session[:sub_menu] == 'favorable' %>
+<p>
+<%= link_to "Favorable Comps" , start_most_favorable_properties_path(:id => @primary_id,:list_num => @list_num ), :class => comp_menu('favorable') %>
+</p>
+<% end %>
+
+</div>
+

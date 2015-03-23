@@ -1,0 +1,52 @@
+
+<%= form_tag  most_favorable_properties_path(:id => @primary_id,:list_num => @list_num) do |f| -%>
+<table class='table-bordered table table-striped' style="margin: auto;">
+	<tr>
+		<th>Boundary</th>
+		<th>Assessed Value:</th>
+    	<th>Home Size:</th>
+		<th>Age</th>
+		<th style='text-align:center;'>Within Neighborhood</th>
+		<th style='text-align:center;'>Same Classification</th>	
+		<th style='text-align:center;'>Same Ext. Construction</th>	
+		<th></th>
+		<th></th>	
+	</tr>
+	<tr>
+		<td><b>Upper</b></td>
+		<td><%= select_tag :assessed_value_mult_hi, options_for_select(most_favor_range(@myprop_value), session[:assessed_value_mult_hi]),{:class => 'span2'} %></td>
+		<td><%= select_tag :home_size_mult_hi, options_for_select(most_favor_range(@myprop_size), session[:home_size_mult_hi]),{:class => 'span2'} %></td>
+		<td><%= select_tag :age_mult_hi, options_for_select(most_favor_range(@myprop_age), session[:age_mult_hi]), :style => '  width: 110px;' %></td>
+		<td style='text-align:center;vertical-align:middle;'><%= check_box_tag :nhood_mult, 'placeholder', session[:nhood_mult] %></td>
+		<td style='text-align:center;vertical-align:middle;'><%= check_box_tag :class_mult, 'placeholder', session[:class_mult] %></td>
+		<td style='text-align:center;vertical-align:middle;'><%= check_box_tag :ext_constr_mult, 'placeholder', session[:ext_constr_mult] %></td>
+		<td><%= submit_tag 'Search', :class => 'btn btn-primary' %></td>
+      	<td><%= link_to 'Cancel', properties_path, :class => 'btn' %></td>      	
+	</tr>
+	<tr>
+		<td><b>Primary</b></td>
+		<td><b>$<%= number_with_delimiter(@myprop_value, :delimiter => ',') %></b></td>
+		<td><b><%= number_with_delimiter(@myprop_size, :delimiter => ',') %> Square Feet</b></td>
+		<td><b><%= @myprop_age %> years old</b></td>
+		<td><b><%= @myprop_neighborhood %></b></td>
+		<td><b><%= @myprop.class_code %></b></td>
+		<td></td>
+		<td></td>
+      	<td></td>      	
+	</tr>
+	<tr>
+		<td><b>Lower</b></td>
+		<td><%= select_tag :assessed_value_mult_low, options_for_select(most_favor_range(@myprop_value), session[:assessed_value_mult_low]),{:class => 'span2'} %></td>
+		<td><%= select_tag :home_size_mult_low, options_for_select(most_favor_range(@myprop_size), session[:home_size_mult_low]),{:class => 'span2'} %></td>
+		<td><%= select_tag :age_mult_low, options_for_select(most_favor_range(@myprop_age), session[:age_mult_low]), :style => '  width: 110px;' %></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+      	<td></td>      	
+	</tr>
+</table>
+	
+<% end -%>
+
+

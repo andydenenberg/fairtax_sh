@@ -1,0 +1,232 @@
+<style type="text/css">
+
+.table th,
+.table td {
+  padding: 8px;
+  line-height: 18px;
+  text-align: left;
+  vertical-align: top;
+  border-top: none; //1px solid #dddddd;
+}
+</style>
+
+<script>
+
+function plot(s1,ticks,chart, max_y) {
+	
+	var seriescolors = [ '#4BB2C5', '#73C774', '#EAA228'  ]  ;
+	
+	 plot1 = $.jqplot(chart, [s1], {
+		title: 'Tax Rate' ,
+        
+        // The "seriesDefaults" option is an options object that will
+        // be applied to all series in the chart.
+        seriesDefaults:{
+		    axesDefaults: { fontSize: '14pt' },
+			seriesColors: seriescolors,
+            renderer:$.jqplot.BarRenderer,
+            rendererOptions: {fillToZero: true,
+	            varyBarColor: true,
+	            animation: { speed: 2500 },
+                barWidth: 40,
+                barPadding: 0,
+                barMargin: 0,
+                highlightMouseOver: false
+    
+    }
+        },
+        // Custom labels for the series are specified with the "label"
+        // option on the series option.  Here a series option object
+        // is specified for each series.
+        series:[ {
+pointLabels: { show: true }
+//            {label:'626 Hill Rd',
+//			color: '#73C774'
+//			},
+//            {label:'Block: 05-18-106'},
+//            {label:'Comps'}
+         } ],
+        // Show the legend and put it outside the grid, but inside the
+        // plot container, shrinking the grid to accomodate the legend.
+        // A value of "outside" would not shrink the grid and allow
+        // the legend to overflow the container.
+        legend: {
+            show: false,
+//            placement: 'outsideGrid',
+//			location: 's'
+        },
+        axes: {
+            // Use a category axis on the x axis and use our custom ticks.
+            xaxis: {
+                renderer: $.jqplot.CategoryAxisRenderer,
+                ticks: ticks,
+                tickOptions: {
+                    fontSize: '12pt'
+                }
+            },
+            // Pad the y axis just a little so bars can get close to, but
+            // not touch, the grid boundaries.  1.2 is the default padding.
+            yaxis: {
+				min: 0,
+				max: max_y,
+                pad: 1.05,
+                tickOptions: {
+                    formatString: "$%'d", fontSize: '12pt'
+                },
+            }
+        }
+    });
+}
+$(document).ready(function(){
+	if ( <%= @comps.count %> > 0 ) {
+		var comp = 'Comps' ;
+		var c = <%= @cas['average_building_ratio'] %> ;
+	} else {
+		var comp = 'Comps'
+		var c = <%= @t_comps_cas['average_building_ratio'] %> ;
+	} ;
+    var ticks = ['<%= @primary_id.street %>','Block', comp ];
+    var s1 = [<%= @primary_id.detail.building_value_ratio %>,
+				<%= @block_cas['average_building_ratio'] %> 
+				,c];
+	var max_y = [ <%= @cas['average_building_ratio'] %>, <%= @primary_id.detail.building_value_ratio %>, <%= @block_cas['average_building_ratio'] %> ] ;
+	max_y = max_y.sort() ;
+	max_y = max_y[2] * 1.2 ;
+
+	plot(s1,ticks,'chart1', max_y) ;
+
+
+});
+</script>
+
+<%= render 'comp_menu' %>
+
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+
+					<div style="text-align:center;font-size:16px;">
+					
+					The analysis determined the Tax Rate for <%= @primary_id.street %> is:<br><br>	
+					
+					<b><%= higher_lower(@block_cas['building_ratio_diff_percentage'] ).html_safe %></b> than it's Block average
+					<% if @block_cas['building_ratio_diff_percentage'] > 1 %>
+					<br><br>(<b> The Data Supports</b> an <b>Appeal to Reduce</b> the Taxes )<br><br>	
+					<% else %>
+					<br><br>	
+					<% end %>
+					
+					
+					<% if @comps.count > 0 %>
+						<b><%= higher_lower(@cas['building_ratio_diff_percentage'] ).html_safe %></b> than the Comp average 
+						<% if @cas['building_ratio_diff_percentage'] > 1 %>
+							<br><br>(<b> Supports</b> an <b>Appeal to Reduce</b> the Taxes )<br><br>					
+						<% else %>					
+							<br><br>	
+						<% end %>
+					<% else %>
+					An additional scan found Tax Rate for <%= @primary_id.street %> is:<br><br> 
+					<b><%= higher_lower(@t_comps_cas['building_ratio_diff_percentage'] ).html_safe %></b> than the Comp Average (<%= @t_comps_num %> found)<br><br>
+					
+					<%= link_to "click here to find favorable comps", most_favorable_properties_path(:id => @primary_id,:list_num => @list_num), :style => 'font-size:12px;' %><br>
+					
+					<% end %>
+					
+					
+<br>
+
+<table    style="margin: auto;">
+	<tr>
+		<td></td>
+		<td><div id='chart1' style=height:300;width:500;></div></td>
+		<td></td>
+	</tr>
+</table>
+	
+
+
+
+			<br><br><br>
+			
+			<div style="font-size:12px;">Scroll down for more information...</div>
+			
+			
+	
+			<br><br><br><br>
+
+			The Building Tax Rate for <%= @primary_id.street %> is 
+			<a href="#"  rel="popover" 
+			data-content="Building value of <b><%= @primary_id.street %></b>
+			 is <b>$<%= number_with_delimiter(@primary_id.detail.current_building, :delimter => ',') %></b>"
+			data-original-title="Primary Property"> 
+			<b><%= number_to_currency(@primary_id.detail.building_value_ratio) %></b>
+			<i class="icon-file"></i>
+			</a><br><br>
+			
+			
+
+			The Block average is
+			<a href="#"  rel="popover" 
+			data-content="The average building value of the <b><%= @block_cas['number_comps'] %></b> Neighbors is <b>$<%= number_with_delimiter(@block_cas['average_building'].to_i, :delimter => ',') %></b>"
+
+			data-original-title="Block: <b><%= @primary_id.pin[0..8] %></b>">
+			<b><%= number_to_currency(@block_cas['average_building_ratio']) %></b></a>
+			
+			<br><br>
+			
+			
+			
+			
+			<% if @comps.count > 0 %>
+					The Comp average is 
+						<a href="#"  rel="popover" 
+						data-content="The average building value of the <b><%= @cas['number_comps'] %></b> Comps in <b>List 1</b> is <b>$$<%= number_with_delimiter(@cas['average_building'].to_i, :delimiter => ',') %></b>"
+
+						data-original-title="Comps: <b>List 1</b>">
+					<b><%= number_to_currency(@cas['average_building_ratio']) %></b></a>
+			<% else %>
+			
+			<% end %>
+			<br><br>
+			
+
+
+	<br>
+	The Land Tax Rate for <b><%= @primary_id.street %></b> is 
+	<a href="#"  rel="popover" 
+	data-content="Land value of <b><%= @primary_id.street %></b>
+	 is <b>$<%= number_with_delimiter(@primary_id.detail.current_land, :delimter => ',') %></b>"
+
+	data-original-title="Primary Property"> 
+	<b><%= number_to_currency(@primary_id.detail.land_value_ratio) %></b>
+	</a>
+
+	<br><br>
+	<b><%= higher_lower(@block_cas['land_ratio_diff_percentage'] ).html_safe %></b> than the Block average of
+	<a href="#"  rel="popover" 
+	data-content="The average land value of the <b><%= @block_cas['number_comps'] %></b> Neighbors is <b>$<%= number_with_delimiter(@block_cas['average_land'].to_i, :delimter => ',') %></b>"
+
+	data-original-title="Block: <b><%= @primary_id.pin[0..8] %></b>">
+	<b><%= number_to_currency(@block_cas['average_land_ratio']) %></b></a>
+
+
+	<br><br>
+<% if @comps.count > 0 %>
+	<b><%= higher_lower(@cas['land_ratio_diff_percentage'] ).html_safe %></b> than the Comp average of 
+		<a href="#"  rel="popover" 
+		data-content="The average building value of the <b><%= @cas['number_comps'] %></b> Comps in <b>List 1</b> is <b>$$<%= number_with_delimiter(@cas['average_land'].to_i, :delimiter => ',') %></b>"
+
+		data-original-title="Comps: <b>List 1</b>">
+	<b><%= number_to_currency(@cas['average_land_ratio']) %></b></a><br><br>
+	
+<% end %>
+
+</div>
+
+<br><br>
+
+			</td>
+			<td></td></tr>
+		</table>
+		<br><br>
+

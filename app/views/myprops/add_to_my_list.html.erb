@@ -1,0 +1,75 @@
+<style type="text/css">
+.map_container {
+  width: 400px;
+}
+
+.gmaps4rails_map {
+  width: 400px;
+  height: 300px;
+}
+
+.table th, .table td {
+border-top-color: #ffffff;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #ffffff;
+}
+
+</style>
+
+
+<div class='banner-blank-strip'></div>
+
+<br>
+
+<table  style="margin: auto;">
+	<tr><td></td>
+		<td style='text-align:center;'>	
+		<div  style='font-size:16px;'>		
+			<% if @status == 'comp' %>
+			    <b><%= @myprop.street %>, <%= @myprop.city %></b> will be added as a Comp<br><br>
+			<% else %>
+				<b><%= @myprop.street %>, <%= @myprop.city %></b> will become your Primary Property<br><br>
+			<% end %>
+		</div>
+	<table  style="margin: auto;">
+		<tr><td>
+			<%= gmaps(:markers     => { :data => @json, :options => { :draggable => true } },
+			      :map_options => {  :auto_zoom => false, :zoom => 16 } ) %>
+	    </td></tr></table>
+
+		<%= render :partial => 'form_add_to_my_list' %>		
+		</td>
+		<td></td></tr>
+	</table>
+	<br><br>
+
+	<% content_for :scripts do %>
+	<script type="text/javascript" charset="utf-8">
+
+	Gmaps.map.HandleDragend = function(pos) {
+	  var geocoder = new google.maps.Geocoder();
+	  geocoder.geocode({
+	    latLng: pos
+	  }, function(responses) {
+	    if (responses && responses.length > 0) {
+			//	  updateFormLocation(latLng) ;
+			//	  alert(latLng) ;
+			var resp = responses[0].geometry.location ;
+//			      alert(resp.lat());
+//			$('#myprop_city').val(responses[0].geometry.location.lat());
+	    } else {
+	    alert('Cannot determine address at this location.');
+	    }
+	  });
+	};
+
+
+	Gmaps.map.callback = function() {
+	  for (var i = 0; i <  this.markers.length; ++i) {
+	     google.maps.event.addListener(Gmaps.map.markers[i].serviceObject, 'dragend', function() { Gmaps.map.HandleDragend(this.getPosition()) });
+	  }
+	};        
+	</script>
+	<% end %>

@@ -1,0 +1,69 @@
+
+<% if @properties.count > 0 %>
+
+<div style="text-align:center;">
+	
+	<div style="text-align:center;">
+	  <h4><%= pluralize(number_with_delimiter(@properties.count.to_i, :delimiter => ','), 'Property') %> Found
+		<br><br>
+		<% if @list.count > 0 %>		
+		Add a property to an existing or start a new comp list<br><small>( Otherwise change criteria and search again )</small></h4>
+		<% else %>
+		Select your property from the following list<br><small>( Otherwise change criteria and search again )</small></h4>
+		<% end %>
+		
+	  </h4>
+	</div>
+	
+</div>
+<br>
+
+		<table class="table table-striped">
+		  <thead>
+				  <tr>
+				        <th>Street</th>
+						<th>City</th>
+						<th>Category</th>
+						<th style='text-align:right'>Assessed Value</th>
+						<% if @list.count > 0 %>
+							<th>Comp List</th>
+						<% else %>
+							<th></th>
+						<% end %>
+				  </tr>
+		  </thead>
+		  <tbody>
+		    <% @properties.each do |property| %>
+		      <tr>
+				  <td><%= link_to property.street , property_path(property.id) %></td>
+				  <td><%= property.city %></td>
+				  <td><%= categories_lu(property.category) %></td>
+				  <td style='text-align:right' >$<%= number_with_delimiter(property.assessed_value, :delimiter => ",") %></td>
+		        <td>
+				<% if @list.count > 0 %>
+		          <%= link_to 'Add to Existing', add_to_my_list_myprops_path(:myprop => { :user_id => current_user, :pin => property.pin, :street => property.street, :city => property.city, :status => 'comp' }), :class => 'btn btn-mini' %>	
+				<%= link_to 'Create New', add_to_my_list_myprops_path(:myprop => { :user_id => current_user, :pin => property.pin, :street => property.street, :city => property.city, :status => 'primary' }), :class => 'btn btn-mini btn-success' %>
+					
+				<% else %>
+				<%= link_to 'Select', add_to_my_list_myprops_path(:myprop => { :user_id => current_user, :pin => property.pin, :street => property.street, :city => property.city, :status => 'primary' }), :class => 'btn btn-mini btn-info' %>
+				<% end %>
+		        </td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+		<%= page_navigation_links @properties %>
+
+		
+<% else %>
+<br>
+<div style="text-align:center;">
+  <h4>No Properties Found
+	<small>Type 'any' in search field to find all properties in a city )<br><br>( Do NOT include Street., Ave. Road, etc. in your text )</small>
+  </h4>
+</div>
+
+<% end %>
+
+

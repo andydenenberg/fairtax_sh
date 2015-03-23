@@ -1,0 +1,158 @@
+<style type="text/css">
+.map_container {
+  padding: 6px;
+  border-width: 1px;
+  border-style: none;
+  border-color: #ccc #ccc #999 #ccc;
+  -webkit-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+  -moz-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+  box-shadow: rgba(64, 64, 64, 0.1) 0 2px 5px;
+  width: 300px;
+}
+
+.gmaps4rails_map {
+  width: 300px;
+  height: 300px;
+}
+
+</style>
+
+<div class='row'>
+	<div class='span6'>
+		<ul class="breadcrumb">
+		  <li><a href="#">Properties</a></li> |
+		  <li><a href="#"><b>Summary</b></a></li>
+		</ul>
+	</div>
+		<div class='span6'>
+
+			<div class="btn-group pull-right">
+			<%= link_to "Summary", property_path(@property), :class => 'btn active' %>
+			<%= link_to "Block Information", my_block_summary_properties_path(:id => @property.id, :sort => 'properties.assessed_value desc'), :class => 'btn' %>
+			</div>
+		</div>
+</div>
+
+<div class='row'>
+	<div class='span11 offset1'>
+	<div class="page-header">
+	  <h3><%= @property.street %>
+		<small><%= @property.city %></small>
+	  </h3>
+	<b>Owner's Name:</b> <%= @owner_name %><br>
+	<b>Last Sale Price:</b> $<%= number_with_delimiter(@sale['price'], :delimiter => ',' ) %><br>
+	<b>Date:</b> <%= @sale['date'] %><br>
+	<b>Buyer:</b> <%= @sale['buyer'] %><br>
+	<b>Seller:</b> <%= @sale['seller'] %><br>
+	<%= link_to 'Info', 'http://chicago.blockshopper.com/property/' + @property.pin.tr('-','') + '/', :class => 'btn' %><br>
+	</div>
+	</div>
+</div>
+
+<div class="row">
+  <div class="span5 offset1">
+	  <b>Pin</b>
+	  <%= @property.pin %> <%= link_to 'County Info', 'http://www.cookcountypropertyinfo.com/Pages/Pin-Results.aspx?pin=' + @property.pin.tr('-',''), :class => 'btn' %>
+	<br><br>
+	  <b>Street</b>
+	  <%= @property.street %><br>
+	  <b>City</b>
+	  <%= @property.city %><br>
+	  <b>Zip</b>
+	  <%= @property.zip %><br><br>	
+	  <b>Latitude</b> <%= @property.latitude %><br> 	
+	  <b>Longitude</b> <%= @property.longitude %><br>	
+	  <b>Neighborhood</b>
+	  <%= @property.neighborhood %><br><br>	
+	  <b>Class code</b>
+	  <%= @property.class_code %><br>	
+	  <b>Category</b>
+	  <%= @property.category %><br>	
+	  <b>Assessed value</b>
+	  $<%= number_with_delimiter(@property.assessed_value, :delimiter => ",") %><br>	
+	<br>
+	<%= gmaps({
+       "map_options" => { "auto_zoom" => false, "zoom" => 14 },
+       "markers"     => { "data" => @json }
+      }) %>
+	<%= link_to 'Edit Location', edit_location_properties_path(:id => @property.id ), :class => 'btn' %>
+  </div>
+
+
+  <div class="span6">
+
+	  <b>Township</b>
+	  <%= @property.detail.township %><br>
+	  <b>Tax code</b>
+	  <%= @property.detail.tax_code %><br><br>
+	
+	  <b>Current year</b>
+	  <%= @property.detail.current_year %><br>
+	  <b>Current value</b>
+	  <%= number_to_currency(@property.detail.current_value) %><br>	
+	  <b>Current land</b>
+	  <%= number_to_currency(@property.detail.current_land) %><br>
+	  <b>Current building</b>
+	  <%= number_to_currency(@property.detail.current_building) %><br><br>
+	
+	  <b>Prior year</b>
+	  <%= @property.detail.prior_year %><br>
+	  <b>Prior value</b>
+	  <%= number_to_currency(@property.detail.prior_value) %><br>
+	  <b>Prior land</b>
+	  <%= number_to_currency(@property.detail.prior_land) %><br>
+	  <b>Prior building</b>
+	  <%= number_to_currency(@property.detail.prior_building) %><br><br>
+
+	  <b>Description</b>
+	  <%= @property.detail.description %><br>
+	  <b>Res type</b>
+	  <%= @property.detail.res_type %><br>
+	  <b>Use</b>
+	  <%= @property.detail.use %><br>
+	  <b>Apartments</b>
+	  <%= @property.detail.apartments %><br><br>
+	
+	  <b>Ext construction</b>
+	  <%= @property.detail.ext_construction %><br>
+	  <b>Full bath</b>
+	  <%= @property.detail.full_bath %><br>
+	  <b>Half bath</b>
+	  <%= @property.detail.half_bath %><br>
+	  <b>Basement</b>
+	  <%= @property.detail.basement %><br>
+	  <b>Attic</b>
+	  <%= @property.detail.attic %><br>
+	  <b>Central air</b>
+	  <%= @property.detail.central_air %><br>
+	  <b>Fireplace</b>
+	  <%= @property.detail.fireplace %><br>
+	  <b>Garage</b>
+	  <%= @property.detail.garage %><br>
+	  <b>Age</b>
+	  <%= @property.detail.age %><br>
+	  <b>Land size</b>
+	  <%= @property.detail.land_size %><br>
+	  <b>Building size</b>
+	  <%= @property.detail.building_size %><br>
+	  <b>Certified</b>
+	  <%= @property.detail.certified %><br>
+	  <b>Land value ratio</b>
+	  <%= @property.detail.land_value_ratio %><br>
+	  <b>Building value ratio</b>
+	  <%= @property.detail.building_value_ratio %><br>
+	  <b>Property</b>
+	  <%= @property.detail.property_id %><br>
+
+</div>
+</div>
+
+<div class='row'>
+	<div class='span12'>
+		<div class="form-actions">
+		  <%= link_to 'Edit Property', edit_property_path(@property), :class => 'btn' %>
+		  <%= link_to 'Delete', property_path(@property), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+		  <%= link_to 'Edit Details', edit_detail_path(@property.detail), :class => 'btn' %>
+		</div>
+	</div>
+</div>

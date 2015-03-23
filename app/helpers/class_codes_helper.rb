@@ -1,0 +1,2 @@
+module ClassCodesHelper
+end

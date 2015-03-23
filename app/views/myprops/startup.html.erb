@@ -1,0 +1,23 @@
+
+
+<br>
+		<div class="hero-unit" style='text-align:center;background-color: #ffffff;'>
+		  <h1>Welcome to FairTaxes</h1>
+		<br>
+		  <p>To start, please find your property</p>
+		  <p><br>Enter a Street Address - Just the number and name<br><br>
+		- something like... 123 main<br>
+		- no need for Street, Road, Rd. etc..<br><br></p>
+		<%= form_for @property, :url => search_properties_path, :html => { :class => 'form-search' } do |f| -%>
+		
+		<%= f.hidden_field :city, :value => 'All' %>
+		<%= f.hidden_field :category, :value => '2' %>
+		
+
+		    <span style='height:30px;line-height:30px'><%= f.text_field :street, :class => 'search-query' %></span>
+		  <%= button_tag "Search", :class => "btn btn-large btn-success" %>
+		<% end -%>
+		  </p>
+
+		</div>
+		

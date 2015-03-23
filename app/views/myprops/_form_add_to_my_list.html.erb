@@ -1,0 +1,26 @@
+<%= form_for @myprop, :html => { :class => 'form-horizontal' } do |f| %>
+
+<%= f.hidden_field :pin, :value => @myprop.pin %>
+<%= f.hidden_field :street, :value => @myprop.street %>
+<%= f.hidden_field :city, :value => @myprop.city %>
+<%= f.hidden_field :user_id, :value => @myprop.user_id %>
+
+		
+		
+			
+			<% if @status == 'comp' %>
+		 		<br><b>Add the property to List: </b>
+		<%= f.select :list_num, list_options, {:selected => 1},{:class => 'span2'} %><br>
+			<% else %>
+				<%= f.hidden_field :list_num, :value => 'Primary Property to New List' %>
+			<% end %>
+			</dl>
+			<br>If the location on the map is incorrect, drag the Marker to <br>the proper location and check the Map Correction box.<br><br>
+			
+<div class='well'>
+	  Map Correction <%= check_box_tag 'correction' %>&nbsp;&nbsp;&nbsp;
+      <%= f.submit 'Confirm Addition', :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', start_search_properties_path, :class => 'btn' %>
+</div>
+
+<% end %>

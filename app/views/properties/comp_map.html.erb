@@ -1,0 +1,60 @@
+<style type="text/css">
+.map_container {
+  width: 400px;
+}
+
+.gmaps4rails_map {
+  width: 400px;
+  height: 300px;
+}
+
+.table th, .table td {
+border-top-color: #ffffff;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #ffffff;
+}
+
+</style>
+
+<%= render 'comp_menu' %>
+
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+		<div class="page-header">
+		  <h3>Map of Primary and Comps
+		  </h3>
+		</div>
+		
+			<table  class="table">	
+			<tr>
+				<td>
+				<p><b>Primary Property: </b><%= image_tag('http://maps.google.com/mapfiles/marker.png') %><br>
+				<%= link_to @primary_id.street, property_path(@primary_id ) %>, <%= @primary_id.city %> </p>
+				<p><b>Comps: <%= image_tag('http://labs.google.com/ridefinder/images/mm_20_green.png') %></b><br></p>
+			<% if @props.count > 0 %>
+				<% @props.each_with_index do |prop, i| %>
+					<%= link_to (i+1).to_s + ' - ' + prop.street, property_path(prop.id) %><br>
+				<% end %><br>
+			<% else %>
+				No properties in list<br>
+				<p class='bc-menu'><%= link_to 'Find Favorable Comps', most_favorable_properties_path(:id => @primary_id, :list_num => @list_num), :class => 'btn' %></p>					
+				
+			<% end %>
+		    	</td>
+
+				<td>				
+					<%= gmaps(:markers     => { :data => @json },
+					      :map_options => { :center_on_user => false, :auto_zoom => @props.count, :zoom => 14 } ) %>		
+				</td>		
+		  </tr>
+		</table>
+		
+	</td>
+	<td></td></tr>
+</table>
+<br><br>
+
+

@@ -1,0 +1,35 @@
+<h1>Listing owners</h1>
+
+<table class='table table-condensed table-striped'>
+  <tr>
+    <th>Owner Name</th>
+    <th>Address</th>
+    <th>Tax Year</th>
+    <th>Recent Sale Price</th>
+	<th>Recent Sale Date</th>
+    <th>Recent Seller</th>
+    <th>Property ID</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @owners.each do |owner| %>
+  <tr>
+    <td><%= owner.cc_name %></td>
+    <td><%= owner.cc_address %></td>
+    <td><%= owner.cc_tax_year %></td>
+    <td><%= owner.recent_sale_price %></td>
+    <td><%= owner.recent_sale_date %></td>
+    <td><%= owner.recent_seller %></td>
+    <td><%= owner.property_id %></td>
+    <td><%= link_to 'Show', owner %></td>
+    <td><%= link_to 'Edit', edit_owner_path(owner) %></td>
+    <td><%= link_to 'Destroy', owner, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Owner', new_owner_path %>

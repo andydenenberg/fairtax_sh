@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  cc: MyString
+  description: MyString
+  orig_desc: MyString
+  category: MyString
+  comments: MyString
+  value: MyString
+
+two:
+  cc: MyString
+  description: MyString
+  orig_desc: MyString
+  category: MyString
+  comments: MyString
+  value: MyString

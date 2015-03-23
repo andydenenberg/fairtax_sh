@@ -1,0 +1,172 @@
+<h1>/Detail</h1>
+
+<p>
+  <b>Pin</b><br>
+  <%= @detail.pin %>
+</p>
+
+<p>
+  <b>City</b><br>
+  <%= @detail.city %>
+</p>
+
+<p>
+  <b>Township</b><br>
+  <%= @detail.township %>
+</p>
+
+<p>
+  <b>Neighborhood</b><br>
+  <%= @detail.neighborhood %>
+</p>
+
+<p>
+  <b>Tax code</b><br>
+  <%= @detail.tax_code %>
+</p>
+
+<p>
+  <b>Classification</b><br>
+  <%= @detail.classification %>
+</p>
+
+<p>
+  <b>Current year</b><br>
+  <%= @detail.current_year %>
+</p>
+
+<p>
+  <b>Current land</b><br>
+  <%= @detail.current_land %>
+</p>
+
+<p>
+  <b>Current building</b><br>
+  <%= @detail.current_building %>
+</p>
+
+<p>
+  <b>Prior year</b><br>
+  <%= @detail.prior_year %>
+</p>
+
+<p>
+  <b>Prior land</b><br>
+  <%= @detail.prior_land %>
+</p>
+
+<p>
+  <b>Prior building</b><br>
+  <%= @detail.prior_building %>
+</p>
+
+<p>
+  <b>Prior value</b><br>
+  <%= @detail.prior_value %>
+</p>
+
+<p>
+  <b>Current value</b><br>
+  <%= @detail.current_value %>
+</p>
+
+<p>
+  <b>Description</b><br>
+  <%= @detail.description %>
+</p>
+
+<p>
+  <b>Res type</b><br>
+  <%= @detail.res_type %>
+</p>
+
+<p>
+  <b>Use</b><br>
+  <%= @detail.use %>
+</p>
+
+<p>
+  <b>Apartments</b><br>
+  <%= @detail.apartments %>
+</p>
+
+<p>
+  <b>Ext construction</b><br>
+  <%= @detail.ext_construction %>
+</p>
+
+<p>
+  <b>Full bath</b><br>
+  <%= @detail.full_bath %>
+</p>
+
+<p>
+  <b>Half bath</b><br>
+  <%= @detail.half_bath %>
+</p>
+
+<p>
+  <b>Basement</b><br>
+  <%= @detail.basement %>
+</p>
+
+<p>
+  <b>Attic</b><br>
+  <%= @detail.attic %>
+</p>
+
+<p>
+  <b>Central air</b><br>
+  <%= @detail.central_air %>
+</p>
+
+<p>
+  <b>Fireplace</b><br>
+  <%= @detail.fireplace %>
+</p>
+
+<p>
+  <b>Garage</b><br>
+  <%= @detail.garage %>
+</p>
+
+<p>
+  <b>Age</b><br>
+  <%= @detail.age %>
+</p>
+
+<p>
+  <b>Land size</b><br>
+  <%= @detail.land_size %>
+</p>
+
+<p>
+  <b>Building size</b><br>
+  <%= @detail.building_size %>
+</p>
+
+<p>
+  <b>Certified</b><br>
+  <%= @detail.certified %>
+</p>
+
+<p>
+  <b>Land value ratio</b><br>
+  <%= @detail.land_value_ratio %>
+</p>
+
+<p>
+  <b>Building value ratio</b><br>
+  <%= @detail.building_value_ratio %>
+</p>
+
+<p>
+  <b>Property</b><br>
+  <%= @detail.property_id %>
+</p>
+
+<div class="form-actions">
+  <%= link_to 'Back', details_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_detail_path(@detail), :class => 'btn' %>
+  <%= link_to 'Delete', detail_path(@detail), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  pin: MyString
+  area: 1
+  subdivision: 1
+  block: 1
+  parcel: 1
+  unit: 1
+  street: MyString
+  city: MyString
+  country: MyString
+  zip: MyString
+  latitude: 1.5
+  longitude: 1.5
+  gmaps: false
+  neighborhood: MyString
+  class_code: MyString
+  assessed_value: MyString
+  category: 1
+
+two:
+  pin: MyString
+  area: 1
+  subdivision: 1
+  block: 1
+  parcel: 1
+  unit: 1
+  street: MyString
+  city: MyString
+  country: MyString
+  zip: MyString
+  latitude: 1.5
+  longitude: 1.5
+  gmaps: false
+  neighborhood: MyString
+  class_code: MyString
+  assessed_value: MyString
+  category: 1

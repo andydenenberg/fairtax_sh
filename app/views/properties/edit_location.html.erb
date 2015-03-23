@@ -1,0 +1,86 @@
+<style type="text/css">
+.map_container {
+  width: 400px;
+}
+
+.gmaps4rails_map {
+  width: 400px;
+  height: 300px;
+}
+
+.table th, .table td {
+border-top-color: #ffffff;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #ffffff;
+}
+
+</style>
+
+
+<div class='banner-blank-strip'></div>
+
+
+<table  style="margin: auto;">
+	<tr><td></td>
+		<td>
+	<h2>Edit Location on Map</h2><small>Click and Drag Marker to new Location</small>		
+	  
+			<%= gmaps(:markers     => { :data => @json, :options => { :draggable => true } },
+			      :map_options => {  :auto_zoom => false, :zoom => 16 } ) %>
+
+
+				<%= form_for @property, :html => { :class => 'form-horizontal' } do |f| %>
+
+							<dl class="dl-horizontal">
+						        <dt>Latitude:</dt>
+						        <dd><%= f.text_field :latitude, :value => @property.latitude %></dd>
+						        <dt>Longitude:</dt>
+						        <dd><%= f.text_field :longitude, :value => @property.longitude %></dd>
+						        <dt>Address:</dt>
+						        <dd><%= @property.street %>, <%= @property.city %></dd>
+						        <dt>Pin:</dt>
+						        <dd><%= @property.pin %></dd>
+						    </dl>
+
+				    <div class="form-actions">
+				      <%= f.submit 'Confirm Addition', :class => 'btn btn-primary' %>
+				      <%= link_to 'Cancel', myprops_path, :class => 'btn' %>
+				    </div>
+
+				<% end %>
+				
+		</td>
+		<td></td></tr>
+	</table>
+	<br><br>
+
+	<% content_for :scripts do %>
+	<script type="text/javascript" charset="utf-8">
+
+	Gmaps.map.HandleDragend = function(pos) {
+	  var geocoder = new google.maps.Geocoder();
+	  geocoder.geocode({
+	    latLng: pos
+	  }, function(responses) {
+	    if (responses && responses.length > 0) {
+			//	  updateFormLocation(latLng) ;
+			//	  alert(latLng) ;
+//			      alert(responses[0].geometry.location.lat());
+			$('#property_latitude').val(responses[0].geometry.location.lat());
+			$('#property_longitude').val(responses[0].geometry.location.lng());
+	    } else {
+	    alert('Cannot determine address at this location.');
+	    }
+	  });
+	};
+
+
+	Gmaps.map.callback = function() {
+	  for (var i = 0; i <  this.markers.length; ++i) {
+	     google.maps.event.addListener(Gmaps.map.markers[i].serviceObject, 'dragend', function() { Gmaps.map.HandleDragend(this.getPosition()) });
+	  }
+	};        
+	</script>
+	<% end %>

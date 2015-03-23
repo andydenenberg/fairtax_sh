@@ -1,0 +1,286 @@
+<style type="text/css">
+#anim_chart .jqplot-point-label, #mine {
+//  background-image:url('http://maps.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png');
+//  width:25px;
+//  height:29px;
+//  border: 1.5px solid #aaaaaa;
+//  padding: 1px 3px;
+  background-color: #00ff00;
+	font-style:bold;
+	color: black;
+	font-size: 12px;
+
+}
+</style>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		//		var height = $(window).width() / 2 ;
+		//		var width = $(window).width() * 0.8 ;
+		//		$('#chartdiv2').css({'width': width});
+		
+chart = 'anim_chart' ;
+
+		rs() ;
+		
+		bar_anim(chart) ;
+		
+//		bar_anim('land_chart') ;
+		
+	    });  // document
+	
+// blue = #4BB2C5;
+// brown = #EAA228;
+
+
+		function bar_anim (chart)
+		{
+				
+		var Building = [ <%= bl_graph_rate(@properties, @primary_prop, @average , @land_average)[0] %> ] ;
+		var Building_ave = [ <%= bl_graph_rate(@properties, @primary_prop, @average , @land_average)[1] %> ] ;
+		var Land = [ <%= bl_graph_rate(@properties, @primary_prop, @average , @land_average)[2] %> ] ;
+		var Land_ave = [ <%= bl_graph_rate(@properties, @primary_prop, @average , @land_average)[3] %> ] ;
+		var seriescolors = [ '#4BB2C5', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774', '#73C774'  ]  ;
+
+		var labels = ['Building Tax Rate',  'Building Average'];
+
+				    plot1 = $.jqplot(chart, [ Building, Building_ave], {
+					    title:'Tax Rate ($/foot)',
+
+				        // Turns on animatino for all series in this plot.
+				        animate: true,
+				        // Will animate plot on calls to plot1.replot({resetAxes:true})
+				        animateReplot: true,
+				        cursor: {
+				            show: true,
+				            zoom: true,
+				            looseZoom: true,
+				            showTooltip: false
+				        },
+			            legend: {
+			                show: true,
+							showSwatch: true,
+							labels: labels,
+							showLabels: true,
+			                renderer: $.jqplot.EnhancedLegendRenderer,
+			                rendererOptions: {
+			                    numberRows: 1
+			                },
+			                placement: 'outsideGrid',
+			                location: 's'
+			            },
+				        series:[
+				            { 	pointLabels: { show: false },
+								color:'#FFFF00',
+				                renderer: $.jqplot.BarRenderer,
+				                showHighlight: false,
+//				                yaxis: 'y2axis',
+				                rendererOptions: { 
+//									varyBarColor : true,
+				                    // Speed up the animation a little bit.
+				                    // This is a number of milliseconds.  
+				                    // Default for bar series is 3000.  
+				                    animation: { speed: 2500 },
+				                    barWidth: 20,
+				                    barPadding: -35,
+				                    barMargin: 0,
+				                    highlightMouseOver: false }
+				            }, 
+				            {    	pointLabels: { show: false },
+//									color:'#73C774', // yellow-brown
+			                renderer: $.jqplot.BarRenderer,
+				                rendererOptions: {
+									varyBarColor : true,
+				                    // speed up the animation a little bit.
+				                    // This is a number of milliseconds.
+				                    // Default for a line series is 2500.
+//				                    animation: { speed: 2000 }
+									barWidth: 20,
+					                barPadding: -70,
+					                barMargin: 0
+                
+				                }
+				            },
+							{ pointLabels: { show: false }, // Building Average
+							color: '#EAA228', // '#73C774', // yellow-brown
+							 },
+							{ pointLabels: { show: false }, // Land Average
+							color: '#819FF7', // '#73C774', // light-blue
+							 }
+				        ],
+
+				//	    axesDefaults: {
+				//	        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+				//	        tickOptions: {
+				//	          angle: 30,
+				//            pad: 0
+				//	        }
+				//	    },
+				
+				seriesDefaults: {
+		        	showMarker:false,
+		        	pointLabels: { show: true,
+		       						edgeTolerance: 5 }
+								 },
+				    axesDefaults: { fontSize: '14pt' },
+					seriesColors: seriescolors,
+				    axes: {
+				            // These options will set up the x axis like a category axis.
+				            xaxis: {
+						    renderer: $.jqplot.CategoryAxisRenderer,
+						tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+						        tickOptions: {
+						        angle: 30,
+					            pad: 0
+						        }
+
+				            },
+				            yaxis: {
+					min:0,
+				                tickOptions: {
+				                    formatString: "$%'d", fontSize: '14pt'
+				                },
+				                rendererOptions: {
+				                    forceTickAt0: true
+				                }
+				            }
+				        }
+				    }).replot();
+				};
+
+$(window).resize(function() {
+rs() ;
+	});
+
+	function rs()
+	{
+			var width = $('.container').innerWidth() * 0.95;
+			var height = width / 2 ;
+			$('#anim_chart').css({'height': height, 'width': width});
+			bar_anim(chart) ;
+	} ;
+	
+</script>
+
+<%= render 'comp_menu' %>
+
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+
+		
+<div style="text-align:center;">
+
+<% if @properties.count - 1 > 0 %>
+
+				  <h3>Comp Tax Analysis</h3>
+					<dl>
+					<dd style='font-size:16px;'>
+	<%= @primary_id.street %> building tax rate is <b><%= number_to_currency(@primary_id.detail.building_value_ratio) %></b><br><br>
+	<b>
+	<%= higher_lower(100 * ( @primary_id.detail.building_value_ratio - @average) / @average ).html_safe %></b> than the average for comps
+					</dd>
+							</dl>
+						</div>
+		<small><br>Scroll down for details..<small>
+
+<br>
+<div id="anim_chart"></div>
+<div id="land_chart"></div>
+
+					
+		<br><br>			
+					<table  id='table1' class="table table-striped table-bordered table-condensed">
+					 <thead>
+					  <tr>	<th>Rank</th>
+							<th>Owner</th>
+							<th>Address</th>
+							<th>Age</th>        
+							<th>Assessed Value</th>        
+					        <th>Building Value</th>
+							<th>Building Size</th>
+							<th>Tax Rate</th>
+							<th>Variance</th>
+					  </tr>
+					  </thead>
+					  <tbody>
+					  <% @properties.each_with_index do |property, i| -%>
+					   <tr>
+						<% if property.pin == @primary_id.pin %>
+						<td style='background: #4BB2C5;'>
+						<% else %>
+					   	<td>
+						<% end %>
+						<%= i + 1 %></td>
+						 <td><a href="/properties/<%= property.id %>"  rel="popover" data-content="<%= property.pin %>" data-original-title="PIN number"><%= property.owner.cc_name %></a>
+						</td>
+					     <td>
+						<a href="/properties/<%= property.id %>"  rel="popover" data-content="<%= property.detail.full_bath %> full<br><%= property.detail.half_bath %> half" data-original-title="Number of Bathrooms"><%= property.street %></a></td>
+						<td style='text-align:right'><%= property.detail.age %></td>
+					     <td style='text-align:right'><%= number_to_currency(property.assessed_value.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse) %></td>
+						<td style='text-align:right'><%= number_to_currency(property.detail.current_building.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse) %></td>
+					    <td style='text-align:right'><%= property.detail.building_size.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse %></td>
+						<td style='text-align:right'><%= number_to_currency(property.detail.building_value_ratio) %></td>
+						<td style='text-align:right'><%= number_with_precision( (100 * ( property.detail.building_value_ratio - @average) / @average ), :precision => 2 ) %>%</td>
+					   </tr>
+					    <% end -%>	
+						<tr>
+							<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+						</tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td>Average</td><td style='text-align:right'>$<%= number_with_precision(@average, :precision => 2 ) %></td><td></td>
+						</tr>
+	
+
+					   </tbody>
+					</table>
+
+
+					<br><br>			
+								<table  id='table1' class="table table-striped table-bordered table-condensed">
+								 <thead>
+								  <tr>	<th>Rank</th>
+										<th>Owner</th>
+										<th>Address</th>
+								        <th>Land Value</th>
+										<th>Land Size</th>
+										<th>Tax Rate</th>
+										<th>Variance</th>
+								  </tr>
+								  </thead>
+								  <tbody>
+								  <% @properties.each_with_index do |property, i| -%>
+								   <tr>
+									 <td><%= i + 1 %></td>
+									 <td><%= property.owner.cc_name %></td>
+								     <td>
+									<a href="/properties/<%= property.id %>"  rel="popover" data-content="<%= property.detail.full_bath %> full<br><%= property.detail.half_bath %> half" data-original-title="Number of Bathrooms"><%= property.street %></a></td>
+									<td style='text-align:right'><%= number_to_currency(property.detail.current_land.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse) %></td>
+								    <td style='text-align:right'><%= property.detail.land_size.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse %></td>
+									<td style='text-align:right'><%= number_to_currency(property.detail.land_value_ratio) %></td>
+									<td style='text-align:right'><%= number_with_precision( (100 * ( property.detail.land_value_ratio - @land_average) / @land_average ), :precision => 2 ) %>%</td>
+								   </tr>
+								    <% end -%>	
+									<tr>
+										<td></td><td></td><td></td><td></td><td></td><td></td>
+									</tr>
+									<tr><td></td><td></td><td></td><td>Average</td><td style='text-align:right'>$<%= number_with_precision(@land_average, :precision => 2 ) %></td><td></td>
+									</tr>
+
+
+								   </tbody>
+								</table>
+
+					</td>
+					<td></td></tr>
+				</table>
+				<br><br>
+				
+<% else %>
+	<br><br>
+	No comps<br><br><br>
+	<%= link_to "Search for comps", start_search_properties_path(:id => @primary_id,:list_num => @list_num), :class => 'btn' %> or 
+	<%= link_to "Recommended comps", most_favorable_properties_path(:id => @primary_id,:list_num => @list_num), :class => 'btn' %>
+<% end %>
+
+

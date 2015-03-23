@@ -1,0 +1,162 @@
+<style>
+//.table th, .table td {
+//border-top-color: #ffffff;
+}
+
+//.table tbody tr:hover td, .table tbody tr:hover th {
+//  background-color: #ffffff;
+}
+</style>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		//		var height = $(window).width() / 2 ;
+		//		var width = $(window).width() * 0.6 ;
+		//		$('#chartdiv2').css({'width': width});
+		
+		plotgraph() ;
+		
+	    });
+
+function plotgraph ()
+{
+	var arr = [<%= bubble_building(@building) %>];
+	if (arr.length == 0 )
+	{ document.getElementById("chartdiv2").innerHTML="No Data to plot";
+	}
+	else 
+	{
+	    var plot1 = $.jqplot('chartdiv2',[arr],{
+	        title: 'Building Tax Rate',
+	        seriesDefaults:{
+	            renderer: $.jqplot.BubbleRenderer,
+	            rendererOptions: {
+	                bubbleGradients: true
+	            },
+	            shadow: true,
+	        },
+	        grid: {
+	            background: '#ffffff',
+	        },
+	      axes: {
+	        // options for each axis are specified in seperate option objects.
+			borderWidth: 30,
+			xaxis: {
+	        renderer: $.jqplot.CategoryAxisRenderer
+	        },
+	        yaxis: {
+	          label: ""
+	        }
+	      }
+	
+	    }).replot()  ;
+	} // if - else
+}
+
+$(window).resize(function() {
+//		var height = $(window).width() / 2 ;
+		var width = $('#table1').innerWidth();
+//		$('#chartdiv2').css({'height': height, 'width': width});
+		$('#chartdiv2').css({'width': width});
+		plotgraph() ;
+	});
+
+//	<tr>
+//		<td><div id="chartdiv2" style="height:300px;width:700px;"></div></td>
+//	</tr>
+	
+</script>
+
+<div class='banner-blank-strip'></div>
+
+<div class='small-menu'>
+	    <div class="btn-group">
+	      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	        <i class="icon-list"></i>	
+			List: <%= @list_num %>
+	          <span class="caret"></span>
+	        </a>
+	        <ul class="dropdown-menu">
+				<% @lists.each do |list| %>
+				  <li><%= link_to "List " + list[0].to_s, comp_analysis_summary_properties_path(:list_num => list[0]) %></li>
+				<% end %>
+	        </ul>
+			<p style='font-size:18px;margin-left:10px;'><b>Primary Property:</b> <%= @primary_id.street %>, <%= @primary_id.city %></p>
+			<%= link_to 'View', comp_analysis_summary_properties_path(:id => @primary_id,:list_num => @list_num), :class => 'active pull-right' %>	
+			<%= link_to 'Edit', details_myprops_path(:id => @primary_id,:list_num => @list_num), :class => 'pull-right' %>	
+			<p class='pull-right'>9 comps in list: </p>
+			
+			
+		</div>		
+</div>
+
+
+
+<div class='bc-menu'>
+  <p>  
+		<%= link_to "Block" , my_block_analysis_properties_path(:id => @primary_id, :list_num => @list_num ), :class => 'btn' %>
+		<%= link_to 'Comps', comp_analysis_summary_properties_path(:id => @primary_id,:list_num => @list_num), :class => 'btn active' %>	</p>
+
+<p style='margin-left:20px;'>		<%= link_to "Summary" , comp_analysis_summary_properties_path(:id => @primary_id,:list_num => @list_num ) %>
+		<%= link_to "Map" , comp_map_properties_path(:id => @primary_id,:list_num => @list_num ) %>
+		<%= link_to "Taxes" , comp_analysis_building_rate_properties_path(:id => @primary_id,:list_num => @list_num ), :class => ' active' %>
+		<%= link_to "Favorable Comps" , most_favorable_myprops_path(:id => @primary_id,:list_num => @list_num ) %>
+		
+  </p>
+</div>
+
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+		
+		<div class="page-header">
+		  <h3>Comp Analysis
+			<small>Hopefully the start of a reduction</small>
+		  </h3>		
+		</div>
+
+<div id="chartdiv2" style="height:300px;width:00px;"></div>
+					
+		<br><br>			
+					<table  id='table1' class="table table-striped table-bordered table-condensed">
+					 <thead>
+					  <tr>	<th>Rank</th>
+							<th>Address</th>
+							<th>Age</th>        
+							<th>Assessed Value</th>        
+					        <th>Building Value</th>
+							<th>Building Size</th>
+							<th>Tax Rate<br>per Foot<br>(bubble size)</th>
+							<th>Variance</th>
+					  </tr>
+					  </thead>
+					  <tbody>
+					  <% @properties.each_with_index do |property, i| -%>
+					   <tr>
+						 <td><%= i + 1 %></td>
+					     <td>
+						<a href="/properties/<%= property.id %>"  rel="popover" data-content="<%= property.detail.full_bath %> full<br><%= property.detail.half_bath %> half" data-original-title="Number of Bathrooms"><%= property.street %></a></td>
+						<td style='text-align:right'><%= property.detail.age %></td>
+					     <td style='text-align:right'><%= number_to_currency(property.assessed_value.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse) %></td>
+						<td style='text-align:right'><%= number_to_currency(property.detail.current_building.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse) %></td>
+					    <td style='text-align:right'><%= property.detail.building_size.to_s.reverse.gsub(/...(?=.)/,'\&,').reverse %></td>
+						<td style='text-align:right'><%= number_to_currency(property.detail.building_value_ratio) %></td>
+						<td style='text-align:right'><%= number_with_precision( (100 * ( property.detail.building_value_ratio - @average) / @average ), :precision => 2 ) %>%</td>
+					   </tr>
+					    <% end -%>	
+						<tr>
+							<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+						</tr>
+						<tr><td></td><td></td><td></td><td></td><td>Mean</td><td style='text-align:right'>$<%= number_with_precision(@average, :precision => 2 ) %></td><td></td><td></td>
+						</tr>
+	
+
+					   </tbody>
+					</table>
+
+					</td>
+					<td></td></tr>
+				</table>
+				<br><br>
+

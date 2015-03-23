@@ -1,0 +1,174 @@
+<script>
+$(document).ready(function(){   
+	
+var s1 = <%= block_summary_graph(@props, @primary_id, 20)[0] %> ;
+var s2 = <%= block_summary_graph(@props, @primary_id, 20)[1] %> ;
+var ticks = <%= block_summary_graph(@props, @primary_id, 20)[2] %>;
+
+chart = 'chart2';
+title = 'Building Size' ;
+barColor = '#17BDB8' ;
+plot1(s2, ticks, chart, title, barColor) ;
+
+chart = 'chart1';
+title = "Assessed Value ($ ,000)" ;
+barColor = '#00749F' ;
+plot1(s1, ticks, chart, title, barColor) ;
+   
+     
+});
+
+
+function plot1(s2, ticks, chart, title)
+{
+	    var plot3 = $.jqplot(chart, [s2], {
+	    title: title,
+	        seriesColors:[barColor],
+	
+	    series:[{renderer:$.jqplot.BarRenderer}, {yaxis:'y2axis'}],
+	
+      seriesDefaults: {
+          renderer:$.jqplot.BarRenderer,
+          pointLabels: { show: false }
+
+      },
+
+      axes: {
+        xaxis: {
+          renderer: $.jqplot.CategoryAxisRenderer,
+          rendererOptions: {
+				varyBarColor : true,
+              // Speed up the animation a little bit.
+              // This is a number of milliseconds.  
+              // Default for bar series is 3000.  
+              animation: {
+                  speed: 2500
+              },
+              barWidth: 20,
+              barPadding: -10,
+              barMargin: 0,
+              highlightMouseOver: true
+          },
+
+          ticks: ticks,
+
+//          label: 'Warranty Concern',
+          labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+          tickOptions: {
+              angle: 30,
+//              fontFamily: 'Courier New',
+              fontSize: '10pt'
+          }
+           
+        },
+        yaxis: {
+            autoscale:true,
+//            label: 'Occurance',
+//            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+			tickOptions: {
+//              angle: -30,
+			    formatString: "%'d", fontSize: '8pt'
+			}
+        },
+      }
+    });
+ 
+}; // function
+
+function plot2(s1, ticks, chart)
+{
+		    var plot2 = $.jqplot(chart, [s1], {
+		    title:'10 - Highest Valued',
+		
+		    series:[{renderer:$.jqplot.BarRenderer}, {yaxis:'y2axis'}],
+
+	      seriesDefaults: {
+	          renderer:$.jqplot.BarRenderer,
+	      },
+
+	      axes: {
+	        xaxis: {
+	          renderer: $.jqplot.CategoryAxisRenderer,
+	          rendererOptions: {
+					varyBarColor : true,
+	              // Speed up the animation a little bit.
+	              // This is a number of milliseconds.  
+	              // Default for bar series is 3000.  
+	              animation: {
+	                  speed: 2500
+	              },
+	              barWidth: 15,
+	              barPadding: -15,
+	              barMargin: 0,
+	              highlightMouseOver: false
+	          },
+
+	          ticks: ticks,
+
+//	          label: 'Warranty Concern',
+	          labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+	          tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+	          tickOptions: {
+	              angle: 30,
+	//              fontFamily: 'Courier New',
+	              fontSize: '11pt'
+	          }
+
+	        },
+	        yaxis: {
+	            autoscale:true,
+	//            label: 'Occurance',
+	            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+	            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+	            tickOptions: {
+	//                angle: 30
+	            },
+	            tickOptions: {
+                    formatString: "$%'d", fontSize: '12pt'
+                }
+    
+	        },
+	        y2axis: {
+	            autoscale:true,
+	//            label: 'Number',
+	            labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+	            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+	            tickOptions: {
+	//                angle: 30
+	            }
+	        }
+	      }
+	    });
+
+}; // function
+
+</script>
+
+<%= render 'comp_menu' %>
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+			<div style="text-align:center;">
+		  <h3>Block: <%= @primary_id.pin[0..8] %>
+		  </h3>
+			</div><hr>
+		
+		<table>
+			<tr><td><div id='chart1'></div></td>
+				<td><div id='chart2'></div></td>
+			</tr>
+		</table>
+		
+		
+	<br>
+	<small>click on any column description to resort</small>
+	
+	<%= render 'my_block_summary' %>
+
+	</td>
+	<td></td></tr>
+</table>
+<br><br>
+

@@ -1,0 +1,52 @@
+<%= form_for @class_code, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> /Class Code</legend>
+
+    <div class="control-group">
+      <%= f.label :cc, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :cc, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :description, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :description, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :orig_desc, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :orig_desc, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :category, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :category, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :comments, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :comments, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :value, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :value, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', class_codes_path, :class => 'btn' %>
+    </div>
+  </fieldset>
+<% end %>

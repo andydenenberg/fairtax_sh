@@ -1,0 +1,111 @@
+<style>
+.field_with_errors {
+background-color: transparent;
+display:block;
+ }
+
+.field_with_errors .control-label {
+color:red;
+ }
+
+/* line 39, ../../app/assets/stylesheets/scaffolds.css.scss */
+#error_explanation {
+  width: 450px;
+/*  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0; */
+//padding: 8px 35px 8px 14px;
+margin-bottom: 8px;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+background-color: #fcf8e3;
+border: 1px solid #fbeed5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+
+}
+/* line 46, ../../app/assets/stylesheets/scaffolds.css.scss */
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+//  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+/*  margin: -7px;
+  margin-bottom: 0px;
+  background-color: #c00;
+  color: #fff; */
+//padding: 8px 35px 8px 14px;
+margin-bottom: 8px;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+background-color: #c00;
+border: 1px solid #fbeed5;
+-webkit-border-radius: 8px;
+-moz-border-radius: 8px;
+border-radius: 8px;
+
+}
+/* line 55, ../../app/assets/stylesheets/scaffolds.css.scss */
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+</style>
+
+<br><br>
+
+<table  style="margin: auto;">
+	<tr><td></td>
+		<td>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class => 'form-horizontal' } ) do |f| %>
+<fieldset>
+  <legend>New User Registration</legend>
+
+  <%= devise_error_messages! %>
+
+		  <div class="control-group">
+		    <%= f.label :email, :class => 'control-label' %>
+		    <div class="controls">
+		      <%= f.text_field :email, :class => 'text_field' %>
+		    </div>
+		  </div>
+
+		  <div class="control-group">
+		    <%= f.label :password, :class => 'control-label' %>
+		    <div class="controls">
+		      <%= f.password_field :password, :class => 'text_field' %>
+		    </div>
+		  </div>
+
+		  <div class="control-group">
+		    <%= f.label 'Confirm Password', :class => 'control-label' %>
+		    <div class="controls">
+		      <%= f.password_field :password_confirmation, :class => 'text_field' %>
+		    </div>
+		  </div>
+
+		    <div class="form-actions">
+		      <%= f.submit 'Sign up', :class => 'btn btn-primary' %>
+		  </fieldset>
+
+		<br>
+
+		<fieldset>
+		  <legend>Existing User?</legend>
+		  <div class="control-group">
+		    <div class="controls">
+		     <%= link_to "Sign in", new_session_path(resource_name), :class => 'btn' %>
+		    </div>
+		  </div>
+
+		</fieldset>
+
+		<% end %>
+
+				<td> </td>
+			</tr>
+		</table>
+

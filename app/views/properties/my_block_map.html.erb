@@ -1,0 +1,62 @@
+<style type="text/css">
+.map_container { width: 500px; }
+.gmaps4rails_map { width: 500px; height: 400px; }
+</style>
+
+<div class='small-menu'>
+  <p>  
+		<%= link_to "Block" , comp_block_summary_properties_path(:id => @myprop, :list_num => @list_num ), :class => 'btn active' %>
+		<%= link_to 'Comps', comp_analysis_summary_properties_path(:list_num => @list_num, :list_num => @list_num), :class => 'btn' %>	
+  </p>
+</div>
+
+		
+<div class='top-menu'>
+	<p>		
+		<%= link_to "Summary" , comp_block_summary_properties_path(:id => @myprop ), :class => 'btn' %>
+		<%= link_to "Map" , my_block_map_properties_path(:id => @myprop ), :class => 'btn  active' %>
+		<%= link_to "Taxes" , my_block_analysis_summary_properties_path(:id => @myprop), :class => 'btn' %>
+		<%= link_to "Analysis" , my_block_analysis_properties_path(:id => @myprop), :class => 'btn' %>
+		
+		    <div class="btn-group pull-right">
+		      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		        <i class="icon-list"></i>	
+				List: <%= @list_num %>
+		          <span class="caret"></span>
+		        </a>
+		        <ul class="dropdown-menu">
+				  <li><%= link_to "List 1", comp_analysis_summary_properties_path(:list_num => 1) %></li>
+				  <li><%= link_to "List 2", comp_analysis_summary_properties_path(:list_num => 2) %></li>
+		        </ul>
+				<%= link_to 'View', comp_analysis_summary_properties_path(:list_num => @list_num), :class => 'btn disabled' %>	
+				<%= link_to 'Edit', details_myprops_path(:list_num => @list_num), :class => 'btn disabled' %>	
+			</div>		
+  </p>
+</div>
+
+
+<div class="banner"><b>Primary Property:</b> <%= @myprop.street %>, <%= @myprop.city %> <b>Block:</b> <%= @myprop.pin[0..8] %><hr><br>
+</div>
+<br>
+
+<div class='row'>
+	<div class='span7'>
+		<% if @props != nil %>
+		<%= gmaps4rails(@json) %>
+		<% else %>
+		Please click here to select your Primary Property
+		<% end %>
+	</div>
+	<div class='span4'>
+<table>		
+	<% @props.each_with_index do |prop,i| %>
+	<tr><td><%= i %></td>
+		<td><%= link_to  "Add to List", properties_path %></td>
+		<td><%= prop.street %></td>
+	</tr>
+		<% end %>
+</table>
+	</div>
+</div>
+
+<br><br>

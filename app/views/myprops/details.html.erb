@@ -1,0 +1,88 @@
+<style type="text/css">
+.map_container {
+  width: 300px;
+}
+
+.gmaps4rails_map {
+  width: 300px;
+  height: 300px;
+}
+
+</style>
+
+<div class='banner-blank-strip'></div>
+
+<div class='small-menu'>
+	    <div class="btn-group">
+	      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	        <i class="icon-list"></i>	
+			List: <%= @list_num %>
+	          <span class="caret"></span>
+	        </a>
+	        <ul class="dropdown-menu">
+				<% @lists.each do |list| %>
+				  <li><%= link_to "List " + list[0].to_s, comp_analysis_summary_properties_path(:list_num => list[0]) %></li>
+				<% end %>
+	        </ul>
+			<p style='font-size:18px;margin-left:10px;'><b>Primary Property:</b> <%= @primary_id.street %>, <%= @primary_id.city %></p>
+			<%= link_to 'View', comp_analysis_summary_properties_path(:id => @primary_id,:list_num => @list_num), :class => 'pull-right' %>	
+			<%= link_to 'Edit', details_myprops_path(:id => @primary_id,:list_num => @list_num), :class => 'active pull-right' %>	
+			<p class='pull-right'>9 comps in list: </p>
+			
+			
+		</div>		
+</div>
+
+
+
+<div class='bc-menu'>
+  <p>  
+		<%= link_to "Block" , comp_block_summary_properties_path(:id => @primary_id, :list_num => @list_num ), :class => 'btn' %>
+		<%= link_to 'Comps', comp_analysis_summary_properties_path(:id => @primary_id,:list_num => @list_num), :class => 'btn active' %>	</p>
+
+<p style='margin-left:20px;'>		<%= link_to "Summary" , comp_analysis_summary_properties_path(:id => @primary_id,:list_num => @list_num ) %>
+		<%= link_to "Map" , comp_map_properties_path(:id => @primary_id,:list_num => @list_num ) %>
+		<%= link_to "Taxes" , comp_analysis_building_rate_properties_path(:id => @primary_id,:list_num => @list_num ) %>
+		<%= link_to "Favorable Comps" , most_favorable_properties_path(:id => @primary_id,:list_num => @list_num ) %>
+		
+  </p>
+</div>
+
+<table   style="margin: auto;"><tr><td><td>
+	<td>
+
+
+		<div class="page-header">
+		  <h3>Comp List <%= @mycomps[0][:list_num] %> <small><%= @mycomps.count %> properties</h3>
+		</div>
+
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Pin</th>
+			  <th>Street</th>
+			  <th>City</th>
+		      <th>Status</th>
+		      <th>Actions</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <% @mycomps.each do |myprop| %>
+		      <tr>
+		        <td><%= link_to myprop.pin, myprop_path(myprop) %></td>
+		        <td><%= myprop.street %></td>
+		        <td><%= myprop.city %></td>
+		        <td><%= myprop.status %></td>
+		        <td>
+		          <%= link_to 'Edit', edit_myprop_path(myprop), :class => 'btn btn-mini' %>
+		          <%= link_to 'Delete', myprop_path(myprop), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-mini btn-danger' %>
+		        </td>
+		      </tr>
+		    <% end %>
+		  </tbody>
+		</table>
+
+		</td>
+		<td></td></tr>
+	</table>
+	<br><br>
